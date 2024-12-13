@@ -6,6 +6,9 @@ import { ShoppingCart, User, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "./mode-toggle";
+import Image from "next/image";
+import logoBlack from "../../public/imgs/logo-black.png";
+import logoWhite from "../../public/imgs/logo-white.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +29,7 @@ const Navbar = () => {
   return (
     <nav className="shadow-md">
       <div className="container mx-auto px-4 py-3">
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center md:p-4">
           {/* Logo and Menu Button */}
           <div className="flex w-full justify-between items-center md:justify-center">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -82,7 +85,18 @@ const Navbar = () => {
               </SheetContent>
             </Sheet>
             <div className="text-2xl font-bold">
-              <Link href="/">Mi Tienda</Link>
+              <Link href="/">
+                <Image
+                  src={logoBlack}
+                  alt="logo-black"
+                  className="w-20 h-auto hidden dark:block"
+                />
+                <Image
+                  src={logoWhite}
+                  alt="logo-white"
+                  className="w-20 h-auto dark:hidden"
+                />
+              </Link>
             </div>
             <Link href="/" className="md:hidden">
               <ShoppingCart
@@ -122,7 +136,7 @@ const Navbar = () => {
         </div>
 
         {/* Icons for Desktop */}
-        <div className="hidden md:flex absolute top-0 right-0 mt-4 mr-4 space-x-4">
+        <div className="hidden md:flex absolute top-0 right-0 mt-8 mr-4 space-x-4">
           <ModeToggle />
           <Link href="/">
             <User
