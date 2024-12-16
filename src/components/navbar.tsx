@@ -9,6 +9,7 @@ import { ModeToggle } from "./mode-toggle";
 import Image from "next/image";
 import logoBlack from "../../public/imgs/logo-black.png";
 import logoWhite from "../../public/imgs/logo-white.png";
+import { NavbarMenu } from "./navbar-menu";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -108,7 +109,7 @@ const Navbar = () => {
 
           {/* Navigation Links for Desktop */}
           <div className="hidden md:flex flex-row items-center space-x-8 mt-4">
-            <Link
+            {/* <Link
               href="/"
               className="text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
             >
@@ -131,12 +132,13 @@ const Navbar = () => {
               className="text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
             >
               Contacto
-            </Link>
+            </Link> */}
+            <NavbarMenu />
           </div>
         </div>
 
         {/* Icons for Desktop */}
-        <div className="hidden md:flex absolute top-0 right-0 mt-8 mr-4 space-x-4">
+        <div className="hidden md:flex absolute top-0 right-0 mt-16 mr-4 space-x-5">
           <ModeToggle />
           <Link href="/">
             <User
