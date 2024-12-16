@@ -11,7 +11,7 @@ import logoBlack from "../../public/imgs/logo-black.png";
 import logoWhite from "../../public/imgs/logo-white.png";
 import { NavbarMenu } from "./navbar-menu";
 
-const Navbar = () => {
+export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
@@ -156,6 +156,4 @@ const Navbar = () => {
       </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
