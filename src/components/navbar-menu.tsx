@@ -179,7 +179,10 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className="text-sm font-medium leading-none">
-            <Link href={href} className="hover:underline">
+            <Link
+              href={href}
+              className="hover:underline font-semibold tracking-tight"
+            >
               {title}
             </Link>
           </div>
