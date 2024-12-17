@@ -8,13 +8,23 @@ import {
 import SectionTitle from "./section-title";
 import ProductCard from "./product-card";
 
-export function ProductsCarousel() {
+interface Props {
+  title: string;
+  products: {
+    title: string;
+    price: number;
+    imageUrl: string;
+    badge?: string;
+  }[];
+}
+
+export default function ProductsCarousel({ title, products }: Props) {
   return (
-    <section className="w-full animate-fade">
-      <SectionTitle title="New Arrivals" />
+    <section className="w-full animate-fade mb-8">
+      <SectionTitle title={title} />
       <Carousel className="w-full">
         <CarouselContent className="-ml-1">
-          {Array.from({ length: 5 }).map((_, index) => (
+          {products.map((_, index) => (
             <CarouselItem
               key={index}
               className="pl-1 md:basis-1/2 lg:basis-1/4"
