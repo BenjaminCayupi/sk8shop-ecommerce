@@ -27,11 +27,13 @@ export function Navbar() {
                   src={logoBlack}
                   alt="logo-black"
                   className="w-20 h-auto hidden dark:block"
+                  priority
                 />
                 <Image
                   src={logoWhite}
                   alt="logo-white"
                   className="w-20 h-auto dark:hidden"
+                  priority
                 />
               </Link>
             </div>
