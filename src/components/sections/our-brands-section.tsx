@@ -1,9 +1,9 @@
 "use client";
-import SectionTitle from "./section-title";
-import { Carousel, CarouselContent, CarouselItem } from "./ui/carousel";
+import SectionTitle from "../section-title";
+import { Carousel, CarouselContent, CarouselItem } from "../ui/carousel";
 import * as React from "react";
 import Autoplay from "embla-carousel-autoplay";
-import { AspectRatio } from "./ui/aspect-ratio";
+import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 
 export default function OurBrandsSection() {

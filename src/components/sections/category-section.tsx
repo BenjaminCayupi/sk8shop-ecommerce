@@ -1,5 +1,5 @@
-import CategoryCard from "./category-card";
-import SectionTitle from "./section-title";
+import CategoryCard from "../category-card";
+import SectionTitle from "../section-title";
 
 export default function CategorySection() {
   return (

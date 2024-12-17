@@ -1,9 +1,9 @@
-import BannerSection from "@/components/banner-section";
-import CategorySection from "@/components/category-section";
+import BannerSection from "@/components/sections/banner-section";
 import Footer from "@/components/footer";
-import HeroSection from "@/components/hero-section";
-import OurBrandsSection from "@/components/our-brands-section";
+import HeroSection from "@/components/sections/hero-section";
 import ProductsCarousel from "@/components/products-carousel";
+import CategorySection from "@/components/sections/category-section";
+import OurBrandsSection from "@/components/sections/our-brands-section";
 
 const testProducts = [
   { title: "Tabla Skate", price: 30000, imageUrl: "", badge: "Nuevo" },
