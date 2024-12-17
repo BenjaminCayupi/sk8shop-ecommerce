@@ -1,7 +1,7 @@
-export function HeroSection() {
+export default function HeroSection() {
   return (
-    <div className="bg-red-500 text-white">
+    <section className="bg-red-500 text-white mb-5">
       <h1>Hello Page</h1>
-    </div>
+    </section>
   );
 }

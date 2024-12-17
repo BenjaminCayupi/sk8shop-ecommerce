@@ -8,7 +8,7 @@ export default function SectionTitle({ title, additionalStyles }: Props) {
       <h2
         className={`${
           additionalStyles ? additionalStyles : ""
-        } "mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0"`}
+        } "mt-10 scroll-m-20 pb-2 text-3xl font-semibold tracking-tight transition-colors first:mt-0 capitalize"`}
       >
         {title}
       </h2>
