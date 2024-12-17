@@ -12,7 +12,7 @@ export default function CategoryCard({ title, imageUrl }: CategoryCardProps) {
     ? imageUrl
     : "/imgs/placeholder-image.jpg";
   return (
-    <Card className="w-full overflow-hidden cursor-pointer">
+    <Card className="w-full overflow-hidden cursor-pointer hover:opacity-90 transition-all">
       <div className="relative">
         <AspectRatio ratio={3 / 3} className="hover:scale-125">
           <Image

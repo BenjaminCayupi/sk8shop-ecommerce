@@ -13,12 +13,12 @@ interface Props {
 export default function ProductCard({ title, price, imageUrl, badge }: Props) {
   return (
     <Card>
-      <AspectRatio ratio={16 / 9}>
+      <AspectRatio ratio={16 / 9} className="overflow-hidden">
         <Image
           src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
           alt="Photo by Drew Beamer"
           fill
-          className="h-full w-full rounded-md object-cover"
+          className="h-full w-full rounded-md object-cover hover:scale-125 transform transition duration-y"
         />
         {badge && (
           <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground dark:bg-black dark:text-white capitalize">
