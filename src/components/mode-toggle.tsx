@@ -9,13 +9,13 @@ export function ModeToggle() {
   return (
     <>
       <Sun
-        onClick={() => setTheme("dark")}
-        className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400 dark:hidden transition-all cursor-pointer"
+        onClick={() => setTheme("light")}
+        className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400 hidden dark:block transition-all cursor-pointer"
         aria-label="Carrito de compras"
       />
       <Moon
-        onClick={() => setTheme("light")}
-        className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400 hidden dark:block transition-all cursor-pointer"
+        onClick={() => setTheme("dark")}
+        className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400 dark:hidden transition-all cursor-pointer"
         aria-label="Carrito de compras"
       />
     </>
