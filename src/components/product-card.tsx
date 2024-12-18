@@ -10,7 +10,7 @@ interface Props {
   badge?: string;
 }
 
-export default function ProductCard({ title, price, imageUrl, badge }: Props) {
+export default function ProductCard({ title, price, badge }: Props) {
   return (
     <Card>
       <AspectRatio ratio={16 / 9} className="overflow-hidden">
