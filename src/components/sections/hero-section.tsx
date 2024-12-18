@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useCallback } from "react";
+import { useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { Button } from "../ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
+import { imageSrc } from "@/utils";
 
 interface Props {
   slides: { imageUrl: string }[];
@@ -35,15 +35,14 @@ export default function HeroSection({ slides }: Props) {
           <div className="embla__container">
             {slides.length ? (
               slides.map((slide, index) => (
-                <div className="embla__slide sm:h-[300px]  " key={index}>
-                  <AspectRatio ratio={16 / 9} className="h-full w-full">
-                    <Image
-                      src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
-                      alt="Photo by Drew Beamer"
-                      fill
-                      className="object-cover"
-                    />
-                  </AspectRatio>
+                <div className="embla__slide sm:h-[400px] relative" key={index}>
+                  <Image
+                    src={imageSrc(slide.imageUrl)}
+                    alt="Photo by Drew Beamer"
+                    fill
+                    sizes="100vw"
+                    className="w-full h-full object-cover object-center"
+                  />
                 </div>
               ))
             ) : (
