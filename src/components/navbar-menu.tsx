@@ -197,8 +197,8 @@ const ListItem = React.forwardRef<
 ListItem.displayName = "ListItem";
 
 const SubListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  HTMLAnchorElement,
+  React.ComponentPropsWithoutRef<typeof Link>
 >(({ className, children, href, ...props }, ref) => {
   return (
     <li>
