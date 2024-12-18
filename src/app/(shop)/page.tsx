@@ -15,10 +15,25 @@ const testProducts = [
   { title: "Tabla Skate", price: 30000, imageUrl: "", badge: "Nuevo" },
 ];
 
+const slides = [
+  {
+    imageUrl:
+      "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80",
+  },
+  {
+    imageUrl:
+      "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80",
+  },
+  {
+    imageUrl:
+      "https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80",
+  },
+];
+
 export default function ShopPage() {
   return (
     <>
-      <HeroSection />
+      <HeroSection slides={slides} />
       <div className="container mx-auto px-4">
         <ProductsCarousel title="New Arrivals" products={testProducts} />
         <CategorySection />
