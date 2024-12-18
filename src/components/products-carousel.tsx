@@ -27,7 +27,7 @@ export default function ProductsCarousel({ title, products }: Props) {
           {products.map((_, index) => (
             <CarouselItem
               key={index}
-              className="pl-1 md:basis-1/2 lg:basis-1/4"
+              className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
             >
               <div className="p-1">
                 <ProductCard
@@ -41,11 +41,11 @@ export default function ProductsCarousel({ title, products }: Props) {
           ))}
         </CarouselContent>
 
-        <div className="hidden sm:block">
+        <div className="hidden lg:block">
           <CarouselPrevious />
           <CarouselNext />
         </div>
-        <div className="sm:hidden">
+        <div className="lg:hidden">
           <div className="absolute top-1/2 left-2 flex items-center justify-center">
             <CarouselPrevious className="relative left-0 translate-x-0 hover:translate-x-0 hover:bg-gray-200 dark:hover:bg-gray-700" />
           </div>
