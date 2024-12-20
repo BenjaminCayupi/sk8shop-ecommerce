@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { ShoppingCart, User } from "lucide-react";
-import { ModeToggle } from "./mode-toggle";
+import ModeToggle from "./mode-toggle";
 import Image from "next/image";
 import logoBlack from "../../public/imgs/logo-black.png";
 import logoWhite from "../../public/imgs/logo-white.png";
-import { NavbarMenu } from "./navbar-menu";
+import NavbarMenu from "./navbar-menu";
 import {
   TooltipProvider,
   Tooltip,
@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/react-tooltip";
 import NavbarMobile from "./navbar-mobile";
 
-export function Navbar() {
+export default function Navbar() {
   return (
     <nav className="shadow-md">
       <div className="container py-3">

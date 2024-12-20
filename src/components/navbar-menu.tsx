@@ -75,7 +75,7 @@ const components: {
   },
 ];
 
-export function NavbarMenu() {
+export default function NavbarMenu() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
