@@ -34,12 +34,12 @@ export default function ShopPage() {
   return (
     <>
       <HeroSection slides={slides} />
-      <div className="container mx-auto px-4">
+      <div className="container">
         <ProductsCarousel title="New Arrivals" products={testProducts} />
         <CategorySection />
       </div>
       <BannerSection />
-      <div className="container mx-auto px-4">
+      <div className="container">
         <ProductsCarousel title="Mas vendidos" products={testProducts} />
         <OurBrandsSection />
       </div>
