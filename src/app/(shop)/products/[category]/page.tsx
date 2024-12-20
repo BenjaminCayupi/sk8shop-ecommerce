@@ -1,6 +1,7 @@
 import ProductCard from "@/components/product-card";
 import ProductFilter from "@/components/product-filter/product-filter";
 import SortByFilter from "@/components/product-filter/sort-by-filter";
+import ProductPagination from "@/components/product-pagination";
 import SectionTitle from "@/components/section-title";
 
 interface Props {
@@ -26,6 +27,9 @@ export default async function CategoryPage({ params }: Props) {
             {Array.from({ length: 5 }, (_, index) => (
               <ProductCard title="test" price={200} imageUrl="" key={index} />
             ))}
+          </div>
+          <div className="mt-12">
+            <ProductPagination />
           </div>
         </div>
       </div>
