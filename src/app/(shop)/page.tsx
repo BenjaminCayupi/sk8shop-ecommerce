@@ -43,7 +43,6 @@ export default function ShopPage() {
         <ProductsCarousel title="Mas vendidos" products={testProducts} />
         <OurBrandsSection />
       </div>
-      <Footer />
     </>
   );
 }

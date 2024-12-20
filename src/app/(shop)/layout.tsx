@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Navbar } from "@/components/navbar";
 import NotificationBar from "@/components/notification-bar";
 
@@ -11,6 +12,7 @@ export default function ShopLayout({
       <NotificationBar />
       <Navbar />
       {children}
+      <Footer />
     </>
   );
 }
