@@ -16,7 +16,7 @@ import NavbarMobile from "./navbar-mobile";
 export function Navbar() {
   return (
     <nav className="shadow-md">
-      <div className="container mx-auto px-4 py-3">
+      <div className="container py-3">
         <div className="flex flex-col items-center md:p-4">
           {/* Logo and Menu Button */}
           <div className="flex w-full justify-between items-center md:justify-center">
