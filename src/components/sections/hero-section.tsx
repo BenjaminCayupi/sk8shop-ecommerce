@@ -51,7 +51,7 @@ export default function HeroSection({ slides }: Props) {
           </div>
         </div>
       </div>
-      <div className="container mx-auto px-4 mt-2">
+      <div className="container mt-2">
         <Button variant="ghost" onClick={scrollPrev} size={"icon"}>
           <ChevronLeft />
         </Button>

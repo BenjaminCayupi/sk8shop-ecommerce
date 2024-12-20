@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 export default function Footer() {
   return (
     <div className="border-t border-gray-300 dark:border-gray-600 text-slate-700 dark:text-slate-200">
-      <div className="container mx-auto px-4 grid grid-cols-1 sm:grid-cols-3 mt-8 mb-8">
+      <div className="container grid grid-cols-1 sm:grid-cols-3 mt-8 mb-8">
         <div className="p-2">
           <Image
             src={logoBlack}
