@@ -22,23 +22,31 @@ export default function ProductsCarousel({ title, products }: Props) {
   return (
     <section className="w-full mb-8 motion-preset-slide-up">
       <SectionTitle title={title} />
-      <Carousel className="w-full">
+      <Carousel className="w-full mt-8">
         <CarouselContent className="-ml-1">
-          {products.map((_, index) => (
-            <CarouselItem
-              key={index}
-              className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
-            >
-              <div className="p-1">
-                <ProductCard
-                  title="tabla skate"
-                  price={3000}
-                  imageUrl=""
-                  badge="nuevo"
-                />
-              </div>
-            </CarouselItem>
-          ))}
+          {products.length ? (
+            products.map((_, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4"
+              >
+                <div className="p-1">
+                  <ProductCard
+                    title="tabla skate"
+                    price={3000}
+                    imageUrl=""
+                    badge="nuevo"
+                  />
+                </div>
+              </CarouselItem>
+            ))
+          ) : (
+            <div className="w-full">
+              <p className="text-center text-semibold text-gray-500">
+                Hubo un error al cargar los productos
+              </p>
+            </div>
+          )}
         </CarouselContent>
 
         <div className="hidden lg:block">
