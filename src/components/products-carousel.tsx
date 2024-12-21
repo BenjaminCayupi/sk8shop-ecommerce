@@ -20,7 +20,7 @@ interface Props {
 
 export default function ProductsCarousel({ title, products }: Props) {
   return (
-    <section className="w-full mb-8 motion-preset-fade motion-duration-1500">
+    <section className="w-full mb-8 motion-preset-slide-up">
       <SectionTitle title={title} />
       <Carousel className="w-full">
         <CarouselContent className="-ml-1">
