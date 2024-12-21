@@ -39,10 +39,10 @@ export default function ProductPage() {
     <div className="container px-4 mt-8 flex flex-col">
       {/* Product Data */}
       <div className="w-full flex flex-col md:flex-row">
-        <div className="w-full md:w-7/12 p-3">
+        <div className="w-full md:w-7/12 p-3 motion-preset-slide-up">
           <ProductThumbnail slides={SLIDES} options={OPTIONS} />
         </div>
-        <div className="w-full md:w-5/12 p-3 flex flex-col gap-y-5">
+        <div className="w-full md:w-5/12 p-3 flex flex-col gap-y-5 motion-preset-slide-up motion-delay-75">
           <h2 className="font-bold text-3xl">Nombre Producto</h2>
           <p className="font-semibold">$10.990</p>
           <div className="w-4/6 lg:w-2/5 grid grid-cols-4 gap-2">
