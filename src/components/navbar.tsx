@@ -67,7 +67,7 @@ export default function Navbar() {
 
             <Tooltip>
               <TooltipTrigger>
-                <Link href="/">
+                <Link href="/login">
                   <User
                     className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
                     aria-label="Perfil de usuario"
