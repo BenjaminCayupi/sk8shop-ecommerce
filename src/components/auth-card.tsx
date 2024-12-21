@@ -28,7 +28,7 @@ export function AuthCard() {
   }
 
   return (
-    <Card className=" w-full sm:w-[350px] motion-preset-slide-up">
+    <Card className=" w-full sm:w-[400px] motion-preset-slide-up">
       <CardHeader>
         <CardTitle>Autenticación</CardTitle>
         <CardDescription>Inicia sesión o crea una cuenta</CardDescription>
