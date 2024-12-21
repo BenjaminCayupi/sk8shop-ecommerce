@@ -167,7 +167,6 @@ export default function CartComponent() {
                       className="w-24 h-24 rounded-md"
                       width={24}
                       height={24}
-                      sizes="100%"
                     />
                     <div className="flex-grow space-y-2">
                       <h3 className="font-semibold">{item.name}</h3>

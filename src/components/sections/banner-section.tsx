@@ -11,6 +11,7 @@ export default function BannerSection() {
           alt="Photo by Drew Beamer"
           fill
           className="object-cover"
+          sizes="100%"
         />
       </AspectRatio>
     </div>

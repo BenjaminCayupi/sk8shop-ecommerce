@@ -19,6 +19,7 @@ export default function ProductCard({ title, price, badge }: Props) {
           alt="Photo by Drew Beamer"
           fill
           className="h-full w-full rounded-md object-cover hover:scale-125 transform transition duration-y"
+          sizes="100%"
         />
         {badge && (
           <Badge className="absolute top-2 right-2 bg-primary text-primary-foreground dark:bg-black dark:text-white capitalize">

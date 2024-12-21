@@ -25,6 +25,7 @@ export default function OurBrandsSection() {
                     alt="Photo by Drew Beamer"
                     fill
                     className="h-full w-full rounded-md object-cover"
+                    sizes="100%"
                   />
                 </AspectRatio>
               </div>
