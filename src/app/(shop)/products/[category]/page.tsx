@@ -23,7 +23,7 @@ export default async function CategoryPage({ params }: Props) {
             <p className="text-sm">80 Productos.</p>
             <SortByFilter />
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 animate-fade">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4 motion-preset-fade motion-duration-1500">
             {Array.from({ length: 5 }, (_, index) => (
               <ProductCard title="test" price={200} imageUrl="" key={index} />
             ))}
