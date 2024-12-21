@@ -37,7 +37,7 @@ export default function Navbar() {
                 />
               </Link>
             </div>
-            <Link href="/" className="md:hidden">
+            <Link href="/cart" className="md:hidden">
               <ShoppingCart
                 className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
                 aria-label="Carrito de compras"
@@ -83,7 +83,7 @@ export default function Navbar() {
 
             <Tooltip>
               <TooltipTrigger>
-                <Link href="/">
+                <Link href="/cart">
                   <ShoppingCart
                     className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
                     aria-label="Carrito de compras"
