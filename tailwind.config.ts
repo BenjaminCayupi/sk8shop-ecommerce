@@ -71,19 +71,10 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       animation: {
-        fade: "fadeIn .5s ease-in-out",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       keyframes: {
-        fadeIn: {
-          from: {
-            opacity: "0",
-          },
-          to: {
-            opacity: "1",
-          },
-        },
         "accordion-down": {
           from: {
             height: "0",
@@ -103,5 +94,6 @@ export default {
       },
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
