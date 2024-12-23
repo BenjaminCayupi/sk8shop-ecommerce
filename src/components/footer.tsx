@@ -19,8 +19,9 @@ export default function Footer() {
             alt="logo-white"
             className="w-20 h-auto dark:hidden"
           />
-          <p className="font-extralight mt-2">
-            SK8 ECOMMERCE - 2024 todos los derechos reservados
+          <p className="font-light mt-2">
+            SK8 ECOMMERCE - 2024 <br />
+            Todos los derechos reservados
           </p>
         </div>
         <div className="p-2">
