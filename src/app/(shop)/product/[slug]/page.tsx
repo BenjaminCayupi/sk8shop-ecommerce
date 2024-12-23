@@ -36,7 +36,7 @@ export default function ProductPage() {
   const SLIDE_COUNT = 3;
   const SLIDES = Array.from(Array(SLIDE_COUNT).keys());
   return (
-    <div className="container px-4 mt-8 flex flex-col">
+    <div className="container mt-8 flex flex-col">
       {/* Product Data */}
       <div className="w-full flex flex-col md:flex-row">
         <div className="w-full md:w-7/12 p-3 motion-preset-slide-up">
