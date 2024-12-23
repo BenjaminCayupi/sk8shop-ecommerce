@@ -13,7 +13,7 @@ export default function ModeToggle({ size = "large", title }: Props) {
   const { setTheme } = useTheme();
 
   return (
-    <div className="">
+    <div>
       <div className="flex flex-row">
         <Sun
           onClick={() => setTheme("light")}
