@@ -1,5 +1,5 @@
 "use client";
-import { User, Menu } from "lucide-react";
+import { User, Menu, Heart, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -7,8 +7,11 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
+
 import Link from "next/link";
 import { useState } from "react";
+import ModeToggle from "./mode-toggle";
 
 export default function NavbarMobile() {
   const [isOpen, setIsOpen] = useState(false);
@@ -56,14 +59,36 @@ export default function NavbarMobile() {
             >
               Contacto
             </Link>
+
+            <Separator />
+
             <Link
               href="/"
-              className="text-gray-600 hover:text-gray-900 flex items-center"
+              className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
               onClick={() => setIsOpen(false)}
             >
               <User className="h-5 w-5 mr-2" />
               Perfil
             </Link>
+            <Link
+              href="/"
+              className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
+              onClick={() => setIsOpen(false)}
+            >
+              <Heart className="h-5 w-5 mr-2" />
+              Favoritos
+            </Link>
+
+            <Link
+              href="/"
+              className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
+              onClick={() => setIsOpen(false)}
+            >
+              <ShoppingCart className="h-5 w-5 mr-2" />
+              Carro
+            </Link>
+
+            <ModeToggle size="small" title="Cambiar tema" />
           </nav>
         </SheetContent>
       </Sheet>
