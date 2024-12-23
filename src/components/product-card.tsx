@@ -20,7 +20,7 @@ export default function ProductCard({ title, price, badge }: Props) {
             src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
             alt="Photo by Drew Beamer"
             fill
-            className="h-full w-full rounded-md object-cover hover:scale-125 transform transition duration-y"
+            className="h-full w-full rounded-t-md object-cover hover:scale-125 transform transition duration-y"
             sizes="100%"
           />
           {badge && (
@@ -29,7 +29,7 @@ export default function ProductCard({ title, price, badge }: Props) {
             </Badge>
           )}
         </AspectRatio>
-        <CardContent className="p-2 text-center">
+        <CardContent className="p-2 text-left">
           <p className="font-semibold tracking-tight capitalize">{title}</p>
           <p>$ {price}</p>
         </CardContent>
