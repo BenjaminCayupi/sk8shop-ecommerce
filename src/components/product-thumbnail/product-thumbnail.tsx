@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from "react";
 import { EmblaOptionsType } from "embla-carousel";
 import useEmblaCarousel from "embla-carousel-react";
 import { Thumb } from "./thumb-buttons";
-import "./styles.css";
 import { AspectRatio } from "../ui/aspect-ratio";
 import Image from "next/image";
 type PropType = {
@@ -42,11 +41,11 @@ const ProductThumbnail: React.FC<PropType> = (props) => {
   }, [emblaMainApi, onSelect]);
 
   return (
-    <div className="embla">
+    <div className="embla__tb">
       <div className="embla__viewport" ref={emblaMainRef}>
-        <div className="embla__container">
+        <div className="embla__container__tb">
           {slides.map((index) => (
-            <div className="embla__slide" key={index}>
+            <div className="embla__slide__tb" key={index}>
               <AspectRatio ratio={4 / 3} className="w-full ">
                 <Image
                   src="https://images.unsplash.com/photo-1588345921523-c2dcdb7f1dcd?w=800&dpr=2&q=80"
