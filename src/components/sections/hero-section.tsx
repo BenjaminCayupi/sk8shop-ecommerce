@@ -35,7 +35,10 @@ export default function HeroSection({ slides }: Props) {
           <div className="embla__container">
             {slides.length ? (
               slides.map((slide, index) => (
-                <div className="embla__slide sm:h-[400px] relative" key={index}>
+                <div
+                  className="embla__slide h-[300px] sm:h-[400px] relative"
+                  key={index}
+                >
                   <Image
                     src={imageSrc(slide.imageUrl)}
                     alt="Photo by Drew Beamer"
