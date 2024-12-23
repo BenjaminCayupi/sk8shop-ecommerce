@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ShoppingCart, User } from "lucide-react";
+import { Heart, ShoppingCart, User } from "lucide-react";
 import ModeToggle from "./mode-toggle";
 import Image from "next/image";
 import logoBlack from "../../public/imgs/logo-black.png";
@@ -77,6 +77,22 @@ export default function Navbar() {
               <TooltipContent sideOffset={2}>
                 <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-10 mb-[2px]">
                   Perfil
+                </p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger>
+                <Link href="/favorites">
+                  <Heart
+                    className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
+                    aria-label="Perfil de usuario"
+                  />
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent sideOffset={2}>
+                <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-10 mb-[2px]">
+                  Favoritos
                 </p>
               </TooltipContent>
             </Tooltip>
