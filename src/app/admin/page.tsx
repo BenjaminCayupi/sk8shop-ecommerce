@@ -1,7 +1,7 @@
-export default function AdminPage() {
+export default function Page() {
   return (
-    <div>
-      <h1>Hello Page</h1>
+    <div className="container ">
+      <h1 className="text-3xl font-bold mb-8">Bienvenido, BENJAMIN</h1>
     </div>
   );
 }
