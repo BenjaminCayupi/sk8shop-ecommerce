@@ -11,13 +11,12 @@ export default {
     extend: {
       container: {
         center: true,
-        padding: "1rem",
-        screens: {
-          sm: "100%",
-          md: "100%",
-          lg: "1200px",
-          xl: "1400px",
-          "2xl": "1600px",
+        padding: {
+          DEFAULT: "1rem",
+          sm: "1rem",
+          lg: "4rem",
+          xl: "4rem",
+          "2xl": "4rem",
         },
       },
       fontFamily: {
