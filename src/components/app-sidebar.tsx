@@ -23,6 +23,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import ModeToggle from "./mode-toggle";
 
 // This is sample data.
 const data = {
@@ -31,125 +32,71 @@ const data = {
     email: "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
-  teams: [
-    {
-      name: "Acme Inc",
-      logo: GalleryVerticalEnd,
-      plan: "Enterprise",
-    },
-    {
-      name: "Acme Corp.",
-      logo: AudioWaveform,
-      plan: "Startup",
-    },
-    {
-      name: "Evil Corp.",
-      logo: Command,
-      plan: "Free",
-    },
-  ],
   navMain: [
     {
-      title: "Playground",
+      title: "Productos",
       url: "#",
       icon: SquareTerminal,
       isActive: true,
       items: [
         {
-          title: "History",
-          url: "#",
+          title: "Categorías",
+          url: "/admin/categories",
         },
         {
-          title: "Starred",
-          url: "#",
+          title: "Marcas",
+          url: "/admin/brands",
         },
         {
-          title: "Settings",
-          url: "#",
+          title: "Productos",
+          url: "/admin/products",
         },
       ],
     },
     {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Settings",
+      title: "Ordenes",
       url: "#",
       icon: Settings2,
       items: [
         {
-          title: "General",
-          url: "#",
-        },
-        {
-          title: "Team",
-          url: "#",
-        },
-        {
-          title: "Billing",
-          url: "#",
-        },
-        {
-          title: "Limits",
+          title: "Ordenes",
           url: "#",
         },
       ],
     },
-  ],
-  projects: [
     {
-      name: "Design Engineering",
+      title: "Paginas",
       url: "#",
-      icon: Frame,
+      icon: Bot,
+      items: [
+        {
+          title: "Home",
+          url: "#",
+        },
+        {
+          title: "Sobre nosotros",
+          url: "#",
+        },
+        {
+          title: "Contactos",
+          url: "#",
+        },
+        {
+          title: "Envios",
+          url: "#",
+        },
+      ],
     },
     {
-      name: "Sales & Marketing",
+      title: "Usuarios",
       url: "#",
-      icon: PieChart,
-    },
-    {
-      name: "Travel",
-      url: "#",
-      icon: Map,
+      icon: BookOpen,
+      items: [
+        {
+          title: "Usuarios",
+          url: "#",
+        },
+      ],
     },
   ],
 };
@@ -164,6 +111,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
+        <div className="pl-3">
+          <ModeToggle size="large" title="Cambiar tema" />
+        </div>
         <NavUser user={data.user} />
       </SidebarFooter>
       <SidebarRail />
