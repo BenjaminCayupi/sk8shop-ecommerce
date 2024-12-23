@@ -12,7 +12,7 @@ interface Props {
 export default async function CategoryPage({ params }: Props) {
   const { category } = await params;
   return (
-    <div className="container">
+    <div className="container mt-10">
       <SectionTitle title={category} />
       <div className="flex flex-col lg:flex-row">
         <div className="w-full lg:w-1/6 xl:w-1/6 mr-5">

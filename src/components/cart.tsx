@@ -78,7 +78,7 @@ export default function CartComponent() {
   const total = subtotal + tax;
 
   return (
-    <div className="container py-8">
+    <div className="container mt-10">
       <h1 className="text-3xl font-bold mb-8">Carrito</h1>
       <div className="grid gap-8 lg:grid-cols-3 motion-preset-slide-up">
         <div className="lg:col-span-2">

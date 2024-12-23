@@ -71,7 +71,7 @@ export default function NavbarMobile() {
               Perfil
             </Link>
             <Link
-              href="/"
+              href="/favorites"
               className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
               onClick={() => setIsOpen(false)}
             >
