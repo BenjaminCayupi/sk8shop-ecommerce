@@ -64,6 +64,10 @@ export function CategoryForm({ isEdit }: Props) {
             <Label htmlFor="airplane-mode">Habilitado</Label>
             <Switch id="airplane-mode" />
           </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="airplane-mode">Mostrar en el sitio</Label>
+            <Switch id="airplane-mode" />
+          </div>
         </div>
         <DialogFooter>
           <DialogClose asChild>
