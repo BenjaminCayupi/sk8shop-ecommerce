@@ -1,18 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  AudioWaveform,
-  BookOpen,
-  Bot,
-  Command,
-  Frame,
-  GalleryVerticalEnd,
-  Map,
-  PieChart,
-  Settings2,
-  SquareTerminal,
-} from "lucide-react";
+import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -42,6 +31,10 @@ const data = {
         {
           title: "Categorías",
           url: "/admin/categories",
+        },
+        {
+          title: "Subcategorías",
+          url: "/admin/subcategories",
         },
         {
           title: "Marcas",
