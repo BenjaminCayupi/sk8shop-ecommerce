@@ -1,3 +1,4 @@
+import { testFilter } from "@/actions/test";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
 import { CategoryForm } from "@/components/forms/category-form";
@@ -18,10 +19,10 @@ const testData = [
 
 export default function CategoriesPage() {
   const categoriesHeaders = [
-    { title: "id" },
-    { title: "nombre" },
-    { title: "test" },
-    { title: "test2" },
+    { title: "id", key: "id" },
+    { title: "nombre", key: "name" },
+    { title: "test", key: "test" },
+    { title: "test2", key: "test2" },
   ];
 
   return (
@@ -42,7 +43,10 @@ export default function CategoriesPage() {
       </div>
       <Card className="p-5 mt-4">
         <Table>
-          <DataTableHeaders headers={categoriesHeaders} />
+          <DataTableHeaders
+            headers={categoriesHeaders}
+            filterFunc={testFilter}
+          />
           <TableBody>
             {testData.map((item, index) => (
               <TableRow key={index}>

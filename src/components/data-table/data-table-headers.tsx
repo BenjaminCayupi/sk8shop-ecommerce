@@ -6,18 +6,24 @@ import { TableHead, TableHeader, TableRow } from "../ui/table";
 interface Props {
   headers: {
     title: string;
-    filterFunc?: () => void;
+    key: string;
   }[];
+  filterFunc: (param: string) => Promise<string>;
 }
 
-export default function DataTableHeaders({ headers }: Props) {
+export default function DataTableHeaders({ headers, filterFunc }: Props) {
+  const onClickFilter = async (key: string) => {
+    const res = await filterFunc(key);
+    console.log("res :", res);
+    return res;
+  };
   return (
     <TableHeader>
       <TableRow>
         {headers.map((header) =>
-          header.filterFunc ? (
+          header.key ? (
             <TableHead key={header.title}>
-              <Button variant="ghost" onClick={() => header.filterFunc!()}>
+              <Button variant="ghost" onClick={() => onClickFilter(header.key)}>
                 {header.title}
                 <ArrowUpDown />
               </Button>
