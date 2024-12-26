@@ -23,7 +23,11 @@ export default function DataTableHeaders({ headers, filterFunc }: Props) {
         {headers.map((header) =>
           header.key ? (
             <TableHead key={header.title}>
-              <Button variant="ghost" onClick={() => onClickFilter(header.key)}>
+              <Button
+                variant="ghost"
+                className="text-right capitalize"
+                onClick={() => onClickFilter(header.key)}
+              >
                 {header.title}
                 <ArrowUpDown />
               </Button>
