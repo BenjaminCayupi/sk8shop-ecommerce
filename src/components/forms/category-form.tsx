@@ -12,6 +12,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Edit, Plus } from "lucide-react";
+import { Textarea } from "../ui/textarea";
+import { Switch } from "../ui/switch";
 
 interface Props {
   isEdit: boolean;
@@ -44,16 +46,23 @@ export function CategoryForm({ isEdit }: Props) {
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Name
+            <Label htmlFor="name" className="text-left">
+              Nombre
             </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+            <Input id="name" value="" readOnly className="col-span-3" />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Username
+            <Label htmlFor="description" className="text-left">
+              Descripción
             </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
+            <Textarea
+              placeholder="Descripción de la categoría"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label htmlFor="airplane-mode">Habilitado</Label>
+            <Switch id="airplane-mode" />
           </div>
         </div>
         <DialogFooter>
