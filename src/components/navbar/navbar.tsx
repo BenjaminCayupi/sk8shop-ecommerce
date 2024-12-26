@@ -1,10 +1,10 @@
 import Link from "next/link";
 import { Heart, ShoppingCart, User } from "lucide-react";
-import ModeToggle from "./mode-toggle";
+import ModeToggle from "../mode-toggle";
 import Image from "next/image";
-import logoBlack from "../../public/imgs/logo-black.png";
-import logoWhite from "../../public/imgs/logo-white.png";
-import NavbarMenu from "./navbar-menu";
+import logoBlack from "../../../public/imgs/logo-black.png";
+import logoWhite from "../../../public/imgs/logo-white.png";
+import NavbarMenu from "../navbar/navbar-menu";
 import {
   TooltipProvider,
   Tooltip,
