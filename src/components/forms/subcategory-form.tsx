@@ -46,7 +46,7 @@ export function SubcategoryForm({ isEdit }: Props) {
         <DialogHeader>
           <DialogTitle>{`${
             isEdit ? "Editar" : "Crear"
-          } subcategoría`}</DialogTitle>
+          } Subcategoría`}</DialogTitle>
           <DialogDescription>
             Haz cambios en tus subcategorías aquí. Oprime guardar cuando estés
             listo.
