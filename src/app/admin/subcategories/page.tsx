@@ -34,7 +34,7 @@ export default function SubcategoriesPage() {
           <SubcategoryForm isEdit={false} />
         </div>
       </div>
-      <Card className="p-5 mt-4">
+      <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
           <DataTableHeaders
             headers={subcategoriesHeaders}

@@ -33,7 +33,7 @@ export default function BrandsPage() {
           <BrandsForm isEdit={false} />
         </div>
       </div>
-      <Card className="p-5 mt-4">
+      <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
           <DataTableHeaders headers={brandsHeaders} filterFunc={testFilter} />
           <TableBody>
