@@ -11,7 +11,7 @@ import { Separator } from "@/components/ui/separator";
 
 import Link from "next/link";
 import { useState } from "react";
-import ModeToggle from "./mode-toggle";
+import ModeToggle from "../mode-toggle";
 
 export default function NavbarMobile() {
   const [isOpen, setIsOpen] = useState(false);

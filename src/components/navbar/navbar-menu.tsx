@@ -64,15 +64,6 @@ const components: {
       { title: "API", href: "/docs/primitives/tabs/api" },
     ],
   },
-  {
-    title: "Tooltip",
-    href: "/docs/primitives/tooltip",
-    links: [
-      { title: "Usage", href: "/docs/primitives/tooltip/usage" },
-      { title: "Examples", href: "/docs/primitives/tooltip/examples" },
-      { title: "API", href: "/docs/primitives/tooltip/api" },
-    ],
-  },
 ];
 
 export default function NavbarMenu() {
@@ -88,7 +79,7 @@ export default function NavbarMenu() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Components</NavigationMenuTrigger>
-          <NavigationMenuContent>
+          <NavigationMenuContent className="absolute left-0">
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-5 lg:w-[600px]">
               {components.map((component) => (
                 <ListItem

@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Icons } from "./icons";
+import Link from "next/link";
 
 export function AuthCard() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -152,19 +153,19 @@ export function AuthCard() {
       <CardFooter>
         <p className="px-8 text-center text-sm text-muted-foreground">
           Al hacer click, estas aceptando nuestros{" "}
-          <a
+          <Link
             href="/terms"
             className="underline underline-offset-4 hover:text-primary"
           >
             Términos y Condiciones
-          </a>{" "}
+          </Link>{" "}
           y{" "}
-          <a
+          <Link
             href="/privacy"
             className="underline underline-offset-4 hover:text-primary"
           >
             Política de privacidad
-          </a>
+          </Link>
           .
         </p>
       </CardFooter>
