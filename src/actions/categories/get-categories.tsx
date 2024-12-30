@@ -25,7 +25,7 @@ export async function getCategories({
     ]);
 
     return {
-      categories,
+      data: categories,
       paginationOptions: {
         currentPage: page,
         totalCount: count,
