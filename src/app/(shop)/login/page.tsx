@@ -1,3 +1,4 @@
+import { auth } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,8 +10,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@radix-ui/react-label";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
-export default function LoginPage() {
+export default async function LoginPage() {
+  const session = await auth();
+
+  if (session?.user) {
+    redirect("/profile");
+  }
   return (
     <div className="container mt-10 flex justify-center">
       <div className="flex flex-col gap-6">
@@ -26,7 +33,9 @@ export default function LoginPage() {
               <div className="grid gap-6">
                 <div className="grid gap-4">
                   <div className="grid gap-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email" className="font-medium">
+                      Email
+                    </Label>
                     <Input
                       id="email"
                       type="email"
@@ -36,7 +45,9 @@ export default function LoginPage() {
                   </div>
                   <div className="grid gap-2">
                     <div className="flex items-center">
-                      <Label htmlFor="password">Contraseña</Label>
+                      <Label htmlFor="password" className="font-medium">
+                        Contraseña
+                      </Label>
                       <a
                         href="#"
                         className="ml-auto text-sm underline-offset-4 hover:underline"
