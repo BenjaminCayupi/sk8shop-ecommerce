@@ -13,6 +13,12 @@ import { Input } from "../ui/input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import { PasswordRequirements } from "../password-requirements";
+import { useState } from "react";
+import registerUser from "@/actions/auth/register";
+import { signIn } from "@/actions/auth/helper";
+import { Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { redirect } from "next/navigation";
 
 type Inputs = {
   name: string;
@@ -22,6 +28,7 @@ type Inputs = {
 };
 
 export default function RegisterForm() {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -37,7 +44,24 @@ export default function RegisterForm() {
     }
   };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    setLoading(true);
+    const { name, email, password } = data;
+
+    const response = await registerUser({ name, email, password });
+
+    if (!response.ok) {
+      toast.error(response.message);
+      setLoading(false);
+      return;
+    }
+
+    toast.success("Usuario registrado.");
+
+    await signIn(email, password);
+    setLoading(false);
+    redirect("/");
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -119,7 +143,8 @@ export default function RegisterForm() {
                     {errors.confirmPassword?.message}
                   </p>
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading && <Loader2 className="animate-spin" />}
                   Regístrate
                 </Button>
               </div>
