@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { User } from "next-auth";
 import bcryptjs from "bcryptjs";
 
-export async function checkAuthUser(
+export default async function checkAuthUser(
   email: string,
   password: string
 ): Promise<User | null> {

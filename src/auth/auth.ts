@@ -1,4 +1,4 @@
-import { checkAuthUser } from "@/actions/auth/check-auth-user";
+import checkAuthUser from "@/actions/auth/check-auth-user";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../lib/zod";
