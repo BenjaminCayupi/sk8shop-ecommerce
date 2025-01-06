@@ -75,7 +75,9 @@ export default function RegisterForm() {
             <div className="grid gap-6">
               <div className="grid gap-3">
                 <div className="grid gap-1">
-                  <Label htmlFor="name">Nombre</Label>
+                  <Label htmlFor="name" className="font-medium">
+                    Nombre
+                  </Label>
                   <Input
                     id="name"
                     type="text"
@@ -94,7 +96,9 @@ export default function RegisterForm() {
                   <p className="text-sm text-red-400">{errors.name?.message}</p>
                 </div>
                 <div className="grid gap-1">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="email" className="font-medium">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="text"
@@ -112,7 +116,9 @@ export default function RegisterForm() {
                   </p>
                 </div>
                 <div className="grid gap-1">
-                  <Label htmlFor="password">Contraseña</Label>
+                  <Label htmlFor="password" className="font-medium">
+                    Contraseña
+                  </Label>
                   <Input
                     id="password"
                     type="password"
@@ -130,7 +136,9 @@ export default function RegisterForm() {
                   </p>
                 </div>
                 <div className="grid gap-1">
-                  <Label htmlFor="confirm-password">Confirmar Contraseña</Label>
+                  <Label htmlFor="confirm-password" className="font-medium">
+                    Confirmar Contraseña
+                  </Label>
                   <Input
                     id="confirm-password"
                     type="password"
