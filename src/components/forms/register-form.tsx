@@ -31,6 +31,12 @@ export default function RegisterForm() {
 
   const password = watch("password") || "";
 
+  const passwordMatch = (value: string) => {
+    if (value.trim() !== password.trim()) {
+      return "Las contraseñas no coinciden";
+    }
+  };
+
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
@@ -106,6 +112,7 @@ export default function RegisterForm() {
                     type="password"
                     {...register("confirmPassword", {
                       required: "El campo es requerido",
+                      validate: (value) => passwordMatch(value),
                     })}
                   />
                   <p className="text-sm text-red-400">
