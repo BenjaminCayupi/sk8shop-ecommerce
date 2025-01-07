@@ -13,8 +13,8 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "@/actions/auth/helper";
-import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { redirect } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -23,6 +23,7 @@ type Inputs = {
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const {
     register,
@@ -31,22 +32,25 @@ export default function LoginForm() {
   } = useForm<Inputs>();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setLoading(true);
     const { email, password } = data;
-
-    try {
-      await signIn(email, password);
-    } catch {
-      console.log("errorrr");
+    setLoading(true);
+    const result = await signIn(email, password);
+    if (!result.ok) {
+      setError(result.message);
+      setLoading(false);
+      return;
     }
+
+    setError("");
     setLoading(false);
+    redirect("/");
   };
 
   return (
     <div className="flex flex-col gap-6">
       <Card className="motion-preset-slide-up">
         <CardHeader>
-          <CardTitle className="text-2xl">Bienvenidoo</CardTitle>
+          <CardTitle className="text-2xl">Bienvenido</CardTitle>
           <CardDescription>
             Haz login con tus credenciales o crea una nueva cuenta
           </CardDescription>
@@ -92,15 +96,12 @@ export default function LoginForm() {
                     type="password"
                     {...register("password", {
                       required: "El campo es requerido",
-                      pattern: {
-                        value: /^(?=(.*[a-z]))(?=(.*[A-Z]))(?=(.*\d)).{8,}$/,
-                        message: "Formato invalido",
-                      },
                     })}
                   />
                   <p className="text-sm text-red-400">
                     {errors.password?.message}
                   </p>
+                  <p className="text-sm text-red-400">{error}</p>
                 </div>
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading && <Loader2 className="animate-spin" />}
