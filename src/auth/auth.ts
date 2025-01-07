@@ -1,5 +1,5 @@
 import checkAuthUser from "@/actions/auth/check-auth-user";
-import NextAuth from "next-auth";
+import NextAuth, { User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../lib/zod";
 
@@ -30,12 +30,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  /* callbacks: {
+  callbacks: {
     jwt({ token, user }) {
       if (user) {
         token.data = user;
       }
       return token;
     },
-  }, */
+    session({ session, token }) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      session.user = token.data as any;
+      return session;
+    },
+  },
 });
