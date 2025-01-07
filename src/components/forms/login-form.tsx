@@ -14,7 +14,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Link from "next/link";
 import { signIn } from "@/actions/auth/helper";
 import { Loader2 } from "lucide-react";
-import { redirect } from "next/navigation";
 
 type Inputs = {
   email: string;
@@ -43,7 +42,7 @@ export default function LoginForm() {
 
     setError("");
     setLoading(false);
-    redirect("/");
+    window.location.replace("/");
   };
 
   return (

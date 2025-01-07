@@ -1,5 +1,5 @@
 "use client";
-import { User, Menu, Heart, ShoppingCart } from "lucide-react";
+import { User, Menu, Heart, ShoppingCart, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -12,9 +12,22 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useState } from "react";
 import ModeToggle from "../mode-toggle";
+import { signOut } from "@/actions/auth/helper";
+import { Session } from "next-auth";
 
-export default function NavbarMobile() {
+interface Props {
+  session: Session | null;
+}
+
+export default function NavbarMobile({ session }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const signOutFunc = async () => {
+    setIsOpen(false);
+    await signOut();
+    location.reload();
+  };
+
   return (
     <>
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -62,14 +75,26 @@ export default function NavbarMobile() {
 
             <Separator />
 
-            <Link
-              href="/"
-              className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
-              onClick={() => setIsOpen(false)}
-            >
-              <User className="h-5 w-5 mr-2" />
-              Perfil
-            </Link>
+            {session?.user ? (
+              <Link
+                href="/profile"
+                className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
+                onClick={() => setIsOpen(false)}
+              >
+                <User className="h-5 w-5 mr-2" />
+                Perfil
+              </Link>
+            ) : (
+              <Link
+                href="/login"
+                className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
+                onClick={() => setIsOpen(false)}
+              >
+                <User className="h-5 w-5 mr-2" />
+                Login
+              </Link>
+            )}
+
             <Link
               href="/favorites"
               className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
@@ -88,7 +113,17 @@ export default function NavbarMobile() {
               Carro
             </Link>
 
-            <ModeToggle size="small" title="Cambiar tema" />
+            <div onClick={() => setIsOpen(false)}>
+              <ModeToggle size="small" title="Cambiar tema" />
+            </div>
+            {session?.user && (
+              <div className="flex row cursor-pointer" onClick={signOutFunc}>
+                <LogOut className="h-5 w-5 mr-2 text-gray-600" />
+                <p className="text-gray-600 hover:text-gray-900 cursor-pointer dark:text-white dark:hover:text-gray-400">
+                  Cerrar sesión
+                </p>
+              </div>
+            )}
           </nav>
         </SheetContent>
       </Sheet>
