@@ -4,6 +4,9 @@ import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../lib/zod";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     Credentials({
       credentials: {
@@ -27,4 +30,12 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
+  /* callbacks: {
+    jwt({ token, user }) {
+      if (user) {
+        token.data = user;
+      }
+      return token;
+    },
+  }, */
 });
