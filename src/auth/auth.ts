@@ -17,9 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           //Check if the user exist and validate password
           const user = await checkAuthUser(email as string, password as string);
 
-          if (!user) {
-            throw new Error("Invalid credentials.");
-          }
+          if (!user) return null;
 
           return user;
         } catch (error) {
