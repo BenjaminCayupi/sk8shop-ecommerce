@@ -1,26 +1,30 @@
 import Link from "next/link";
-import { Heart, ShoppingCart, User } from "lucide-react";
+import { Heart, ShoppingCart } from "lucide-react";
 import ModeToggle from "../mode-toggle";
 import Image from "next/image";
 import logoBlack from "../../../public/imgs/logo-black.png";
 import logoWhite from "../../../public/imgs/logo-white.png";
 import NavbarMenu from "../navbar/navbar-menu";
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
-} from "@radix-ui/react-tooltip";
 import NavbarMobile from "./navbar-mobile";
+import NavbarUserMenu from "./navbar-user-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+import { auth } from "@/auth/auth";
 
-export default function Navbar() {
+export default async function Navbar() {
+  const session = await auth();
+
   return (
-    <nav className="shadow-md">
+    <nav className="shadow-md motion-preset-slide-down">
       <div className="container py-3">
         <div className="flex flex-col items-center md:p-4">
-          {/* Logo and Menu Button */}
+          {/* Logo and Menu Button Mobile */}
           <div className="flex w-full justify-between items-center md:justify-center">
-            <NavbarMobile />
+            <NavbarMobile session={session} />
             <div className="text-2xl font-bold">
               <Link href="/">
                 <Image
@@ -59,27 +63,13 @@ export default function Navbar() {
                 <ModeToggle />
               </TooltipTrigger>
               <TooltipContent sideOffset={2}>
-                <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-9 mb-[2px]">
+                <p className="bg-black text-white rounded-md transition-all text-xs">
                   Cambiar tema
                 </p>
               </TooltipContent>
             </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger>
-                <Link href="/login">
-                  <User
-                    className="h-6 w-6 text-gray-600 hover:text-gray-900 dark:text-white dark:hover:text-gray-400"
-                    aria-label="Perfil de usuario"
-                  />
-                </Link>
-              </TooltipTrigger>
-              <TooltipContent sideOffset={2}>
-                <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-10 mb-[2px]">
-                  Perfil
-                </p>
-              </TooltipContent>
-            </Tooltip>
+            <NavbarUserMenu session={session} />
 
             <Tooltip>
               <TooltipTrigger>
@@ -91,7 +81,7 @@ export default function Navbar() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent sideOffset={2}>
-                <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-10 mb-[2px]">
+                <p className="bg-black text-white rounded-md transition-all text-xs">
                   Favoritos
                 </p>
               </TooltipContent>
@@ -107,7 +97,7 @@ export default function Navbar() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                <p className="bg-black text-white rounded-md transition-all text-xs p-1 mr-7 mb-[2px]">
+                <p className="bg-black text-white rounded-md transition-all text-xs">
                   Carro
                 </p>
               </TooltipContent>
