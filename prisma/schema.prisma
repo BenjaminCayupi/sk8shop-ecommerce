@@ -20,6 +20,11 @@ enum Gender {
   unisex
 }
 
+enum Role {
+  admin
+  user
+}
+
 /**
  * Products
  */
@@ -91,4 +96,14 @@ model Inventory {
   productId Int
   size      Size    @relation(fields: [sizeId], references: [id])
   sizeId    Int
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String
+
+  role Role @default(user)
 }
