@@ -1,7 +1,18 @@
 import checkAuthUser from "@/actions/auth/check-auth-user";
-import NextAuth from "next-auth";
+import NextAuth, { DefaultSession } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "../lib/zod";
+
+declare module "next-auth" {
+  /**
+   * Returned by `auth`, `useSession`, `getSession` and received as a prop on the `SessionProvider` React Context
+   */
+  interface Session {
+    user: {
+      role: string;
+    } & DefaultSession["user"];
+  }
+}
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
