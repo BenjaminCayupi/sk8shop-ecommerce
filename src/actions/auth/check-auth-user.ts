@@ -19,12 +19,13 @@ export default async function checkAuthUser(
 
     if (!bcryptjs.compareSync(password, existUser.password)) return null;
 
-    const { id, name, email: userEmail } = existUser;
+    const { id, name, email: userEmail, role } = existUser;
 
     return {
       id,
       name,
       email: userEmail,
+      role,
     } as User;
   } catch (error) {
     console.log("error :", error);
