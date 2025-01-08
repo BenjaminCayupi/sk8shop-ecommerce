@@ -32,14 +32,26 @@ export default function NavbarUserMenu({ session }: Props) {
         />
       </DropdownMenuTrigger>
       <DropdownMenuContent>
+        {session?.user.role === "admin" && (
+          <DropdownMenuItem onClick={() => setOpen(false)}>
+            <Link href="/admin" className="flex row justify-center">
+              <User2 size={20} className="mr-2" />
+              Admin
+            </Link>
+          </DropdownMenuItem>
+        )}
+
+        {session?.user.role === "user" && (
+          <DropdownMenuItem onClick={() => setOpen(false)}>
+            <Link href="/profile" className="flex row justify-center">
+              <User2 size={20} className="mr-2" />
+              Perfil
+            </Link>
+          </DropdownMenuItem>
+        )}
+
         {session?.user ? (
           <>
-            <DropdownMenuItem onClick={() => setOpen(false)}>
-              <Link href="/profile" className="flex row justify-center">
-                <User2 size={20} className="mr-2" />
-                Perfil
-              </Link>
-            </DropdownMenuItem>
             <DropdownMenuItem onClick={signOutFunc}>
               <div className="flex row justify-center cursor-pointer">
                 <LogOut size={20} className="mr-2" />

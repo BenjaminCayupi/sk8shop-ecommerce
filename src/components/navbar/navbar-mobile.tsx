@@ -75,7 +75,18 @@ export default function NavbarMobile({ session }: Props) {
 
             <Separator />
 
-            {session?.user ? (
+            {session?.user.role === "user" && (
+              <Link
+                href="/admin"
+                className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
+                onClick={() => setIsOpen(false)}
+              >
+                <User className="h-5 w-5 mr-2" />
+                Admin
+              </Link>
+            )}
+
+            {session?.user.role === "admin" && (
               <Link
                 href="/profile"
                 className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
@@ -84,7 +95,8 @@ export default function NavbarMobile({ session }: Props) {
                 <User className="h-5 w-5 mr-2" />
                 Perfil
               </Link>
-            ) : (
+            )}
+            {!session?.user && (
               <Link
                 href="/login"
                 className="text-gray-600 hover:text-gray-900 flex items-center dark:text-white dark:hover:text-gray-400"
