@@ -8,26 +8,16 @@ interface Props {
     title: string;
     key: string;
   }[];
-  filterFunc: (param: string) => Promise<string>;
 }
 
-export default function DataTableHeaders({ headers, filterFunc }: Props) {
-  const onClickFilter = async (key: string) => {
-    const res = await filterFunc(key);
-    console.log("res :", res);
-    return res;
-  };
+export default function DataTableHeaders({ headers }: Props) {
   return (
     <TableHeader>
       <TableRow>
         {headers.map((header) =>
           header.key ? (
             <TableHead key={header.title}>
-              <Button
-                variant="ghost"
-                className="text-right capitalize"
-                onClick={() => onClickFilter(header.key)}
-              >
+              <Button variant="ghost" className="text-right capitalize">
                 {header.title}
                 <ArrowUpDown />
               </Button>

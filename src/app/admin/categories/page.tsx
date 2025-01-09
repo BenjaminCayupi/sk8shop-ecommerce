@@ -1,4 +1,3 @@
-import { testFilter } from "@/actions/test";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
@@ -35,10 +34,7 @@ export default function CategoriesPage() {
       </div>
       <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
-          <DataTableHeaders
-            headers={categoriesHeaders}
-            filterFunc={testFilter}
-          />
+          <DataTableHeaders headers={categoriesHeaders} />
           <TableBody>
             {testData.map((item, index) => (
               <TableRow key={index}>
