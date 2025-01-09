@@ -17,7 +17,7 @@ export default function DataTableHeaders({ headers }: Props) {
         {headers.map((header) =>
           header.key ? (
             <TableHead key={header.title}>
-              <Button variant="ghost" className="text-right capitalize">
+              <Button variant="ghost" className="text-left capitalize px-0">
                 {header.title}
                 <ArrowUpDown />
               </Button>
