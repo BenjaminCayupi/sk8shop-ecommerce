@@ -1,3 +1,4 @@
+import { getCategories } from "@/actions/categories/get-categories";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
@@ -5,21 +6,29 @@ import { CategoryForm } from "@/components/forms/category-form";
 import PageTitle from "@/components/page-title";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { paramNumber, paramTake } from "@/utils";
+import { Check, X } from "lucide-react";
 
-const testData = [
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
+const categoriesHeaders = [
+  { title: "id", key: "id" },
+  { title: "nombre", key: "name" },
+  { title: "habilitado", key: "enabled" },
 ];
 
-export default function CategoriesPage() {
-  const categoriesHeaders = [
-    { title: "id", key: "id" },
-    { title: "nombre", key: "name" },
-    { title: "habilitado", key: "enabled" },
-  ];
+interface Props {
+  searchParams: { page?: string; take?: string };
+}
+
+export default async function CategoriesPage({ searchParams }: Props) {
+  const param = await searchParams;
+
+  const page = paramNumber(param.page);
+  const take = paramTake(param.take);
+
+  const { data, paginationOptions } = await getCategories({
+    page,
+    rowsPerPage: take,
+  });
 
   return (
     <div className="container">
@@ -32,29 +41,27 @@ export default function CategoriesPage() {
           <CategoryForm isEdit={false} />
         </div>
       </div>
-      <Card className="p-5 mt-4 motion-preset-slide-up">
+      <Card className="p-5 mt-4">
         <Table>
           <DataTableHeaders headers={categoriesHeaders} />
           <TableBody>
-            {testData.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{item.id}</TableCell>
-                <TableCell>Test name</TableCell>
-                <TableCell>test</TableCell>
-                <TableCell className="flex flex-row justify-end">
-                  <CategoryForm isEdit={true} />
-                  {/*  <Button
-                    className="bg-red-500 hover:bg-red-700 ml-2"
-                    size="icon"
-                  >
-                    <Trash />
-                  </Button> */}
-                </TableCell>
-              </TableRow>
-            ))}
+            {data &&
+              data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{item.id}</TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.enabled ? <Check /> : <X />}</TableCell>
+                  <TableCell className="flex flex-row justify-end">
+                    <CategoryForm isEdit={true} />
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
-        <DataTablePagination />
+        <DataTablePagination
+          currentPage={page}
+          paginationOptions={paginationOptions}
+        />
       </Card>
     </div>
   );
