@@ -60,7 +60,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
         </Table>
         <DataTablePagination
           currentPage={page}
-          paginationOptions={paginationOptions}
+          totalPages={paginationOptions?.totalPages}
         />
       </Card>
     </div>

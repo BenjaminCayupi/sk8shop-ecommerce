@@ -18,23 +18,16 @@ import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-type PaginationOptions = {
-  currentPage: number;
-  totalCount: number;
-  totalPages: number;
-  rowsPerPage: number;
-};
-
 interface Props {
-  paginationOptions: PaginationOptions | undefined;
+  totalPages: number | undefined;
   currentPage: number;
 }
 
 export default function DataTablePagination({
-  paginationOptions,
+  totalPages: totalPagesCount,
   currentPage,
 }: Props) {
-  const totalPages = paginationOptions?.totalPages || 0;
+  const totalPages = totalPagesCount || 0;
   const pathname = usePathname();
   const router = useRouter();
   const [rowPerPage, setRowPerPage] = useState("5");
@@ -53,7 +46,7 @@ export default function DataTablePagination({
 
   const onRowsChange = (value: string) => {
     setRowPerPage(value);
-    router.push(`${pathname}/?page=${currentPage}&take=${value}`);
+    router.push(`${pathname}/?page=1&take=${value}`);
   };
   return (
     <div className="flex flex-row mt-4">
