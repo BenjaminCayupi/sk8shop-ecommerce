@@ -4,13 +4,13 @@ import prisma from "@/lib/prisma";
 
 interface PaginationOptions {
   page?: number;
-  rowsPerPage?: number;
+  rowsPerPage?: 5 | 10 | 15;
   enabled?: boolean;
 }
 
 export async function getCategories({
   page = 1,
-  rowsPerPage = 2,
+  rowsPerPage = 5,
   enabled,
 }: PaginationOptions) {
   try {
