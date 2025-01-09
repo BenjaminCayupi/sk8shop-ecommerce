@@ -1,10 +1,10 @@
+"use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
-  PaginationEllipsis,
 } from "../ui/pagination";
 import {
   Select,
@@ -13,12 +13,52 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { Button } from "../ui/button";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
-export default function DataTablePagination() {
+type PaginationOptions = {
+  currentPage: number;
+  totalCount: number;
+  totalPages: number;
+  rowsPerPage: number;
+};
+
+interface Props {
+  paginationOptions: PaginationOptions | undefined;
+  currentPage: number;
+}
+
+export default function DataTablePagination({
+  paginationOptions,
+  currentPage,
+}: Props) {
+  const totalPages = paginationOptions?.totalPages || 0;
+  const pathname = usePathname();
+  const router = useRouter();
+  const [rowPerPage, setRowPerPage] = useState("5");
+
+  const nextPage = () => {
+    if (currentPage >= totalPages) return;
+
+    router.push(`${pathname}/?page=${currentPage + 1}`);
+  };
+
+  const previousPage = () => {
+    if (currentPage === 1) return;
+
+    router.push(`${pathname}/?page=${currentPage - 1}`);
+  };
+
+  const onRowsChange = (value: string) => {
+    setRowPerPage(value);
+    router.push(`${pathname}/?page=${currentPage}&take=${value}`);
+  };
   return (
     <div className="flex flex-row mt-4">
       <p className="text-[10px]">Filas por pagina</p>
-      <Select value="5">
+      <Select value={rowPerPage} onValueChange={(value) => onRowsChange(value)}>
         <SelectTrigger className="w-[80px]">
           <SelectValue placeholder="Filas por pagina" />
         </SelectTrigger>
@@ -31,33 +71,42 @@ export default function DataTablePagination() {
       <Pagination className="mx-0 justify-end">
         <PaginationContent>
           <PaginationItem>
-            <PaginationLink href="#">
+            <Button
+              variant={"ghost"}
+              size={"sm"}
+              onClick={previousPage}
+              disabled={currentPage === 1}
+            >
               <ChevronLeft className="h-4 w-4" />
-            </PaginationLink>
+            </Button>
           </PaginationItem>
           <div className="hidden sm:flex">
-            <PaginationItem>
-              <PaginationLink href="#">1</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#" isActive>
-                2
-              </PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
-              <PaginationLink href="#">3</PaginationLink>
-            </PaginationItem>
-            <PaginationItem>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((item) => (
+              <PaginationItem key={item}>
+                <PaginationLink
+                  href={`${pathname}/?page=${item}`}
+                  isActive={currentPage === item}
+                >
+                  {item}
+                </PaginationLink>
+              </PaginationItem>
+            ))}
+            {/* <PaginationItem>
               <PaginationEllipsis />
-            </PaginationItem>
+            </PaginationItem> */}
           </div>
           <div className="sm:hidden">
-            <p className="text-sm">2 / 10</p>
+            <p className="text-sm">{`${currentPage} / ${totalPages}`}</p>
           </div>
           <PaginationItem>
-            <PaginationLink href="#">
+            <Button
+              variant={"ghost"}
+              size={"sm"}
+              onClick={nextPage}
+              disabled={currentPage >= totalPages}
+            >
               <ChevronRight className="h-4 w-4" />
-            </PaginationLink>
+            </Button>
           </PaginationItem>
         </PaginationContent>
       </Pagination>
