@@ -45,7 +45,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
         <Table>
           <DataTableHeaders headers={categoriesHeaders} />
           <TableBody>
-            {data &&
+            {data?.length ? (
               data.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell className="font-medium">{item.id}</TableCell>
@@ -55,7 +55,17 @@ export default async function CategoriesPage({ searchParams }: Props) {
                     <CategoryForm isEdit={true} />
                   </TableCell>
                 </TableRow>
-              ))}
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className="font-medium text-center text-gray-500"
+                  colSpan={4}
+                >
+                  No hay registros
+                </TableCell>
+              </TableRow>
+            )}
           </TableBody>
         </Table>
         <DataTablePagination
