@@ -8,12 +8,14 @@ interface CategoryFields {
   title: string;
   description: string;
   enabled: boolean;
+  id?: number;
 }
 
-export async function createCategory({
+export async function createUpdateCategory({
   title: titleField,
   description: descriptionField,
   enabled: enabledField,
+  id,
 }: CategoryFields) {
   try {
     const { title, description, enabled } = await categorySchema.parseAsync({
@@ -22,16 +24,25 @@ export async function createCategory({
       enabled: enabledField,
     });
 
-    const createdCategory = await prisma.category.create({
-      data: { title, description, enabled },
-    });
+    let result;
+
+    if (id) {
+      result = await prisma.category.update({
+        data: { title, description, enabled },
+        where: { id },
+      });
+    } else {
+      result = await prisma.category.create({
+        data: { title, description, enabled },
+      });
+    }
 
     revalidatePath("/admin/categories");
 
     return {
       ok: true,
-      data: createdCategory,
-      message: "Categoría creada",
+      data: result,
+      message: id ? "Categoría actualizada" : "Categoría creada",
     };
   } catch (error) {
     console.log("error :", error);
