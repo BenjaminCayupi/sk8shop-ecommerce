@@ -52,7 +52,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.enabled ? <Check /> : <X />}</TableCell>
                   <TableCell className="flex flex-row justify-end">
-                    <CategoryForm isEdit={true} />
+                    <CategoryForm isEdit={true} id={item.id} />
                   </TableCell>
                 </TableRow>
               ))
