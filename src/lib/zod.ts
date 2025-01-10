@@ -1,4 +1,4 @@
-import { object, string } from "zod";
+import { boolean, object, string } from "zod";
 
 export const loginSchema = object({
   email: string({ required_error: "Email is required" })
@@ -21,4 +21,15 @@ export const registerSchema = object({
         /^(?=(.*[a-z]))(?=(.*[A-Z]))(?=(.*\d)).{8,}$/.test(value ?? ""),
       "Incorrect Format"
     ),
+});
+
+export const categorySchema = object({
+  title: string({ required_error: "El campo es requerido" }).min(
+    4,
+    "Mínimo 4 caracteres"
+  ),
+  description: string({ required_error: "Mínimo 4 caracteres." })
+    .min(4, "Mínimo 4 caracteres.")
+    .max(40, "Máximo 40 caracteres."),
+  enabled: boolean(),
 });
