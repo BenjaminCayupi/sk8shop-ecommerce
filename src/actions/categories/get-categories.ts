@@ -16,7 +16,7 @@ export async function getCategories({
   try {
     const [categories, count] = await Promise.all([
       prisma.category.findMany({
-        orderBy: { title: "asc" },
+        orderBy: { id: "desc" },
         where: { enabled },
         skip: (page - 1) * rowsPerPage,
         take: rowsPerPage,
