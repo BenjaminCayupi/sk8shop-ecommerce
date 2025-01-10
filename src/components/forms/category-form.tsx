@@ -35,6 +35,7 @@ type Inputs = {
 
 export function CategoryForm({ isEdit, id }: Props) {
   const [loading, setLoading] = useState(false);
+  const [formLoading, setFormLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const {
@@ -69,7 +70,7 @@ export function CategoryForm({ isEdit, id }: Props) {
 
   const editModel = async (id: number) => {
     setOpen(true);
-    setLoading(true);
+    setFormLoading(true);
 
     const response = await getCategory(id);
 
@@ -85,7 +86,7 @@ export function CategoryForm({ isEdit, id }: Props) {
       shouldValidate: true,
     });
 
-    setLoading(false);
+    setFormLoading(false);
   };
 
   return (
@@ -113,7 +114,7 @@ export function CategoryForm({ isEdit, id }: Props) {
               listo.
             </DialogDescription>
           </DialogHeader>
-          {loading ? (
+          {formLoading ? (
             <div className="w-full h-[250px] content-center justify-items-center">
               <Loader2 className="motion-preset-spin" size={50} />
             </div>
