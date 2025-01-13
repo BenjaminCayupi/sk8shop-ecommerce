@@ -1,4 +1,4 @@
-import { testFilter } from "@/actions/test";
+import { getSubCategories } from "@/actions/subcategories/get-subcategories";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
@@ -6,22 +6,39 @@ import { SubcategoryForm } from "@/components/forms/subcategory-form";
 import PageTitle from "@/components/page-title";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { paramNumber, paramTake } from "@/utils";
+import { Check, X } from "lucide-react";
 
-const testData = [
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
+const subcategoriesHeaders = [
+  { title: "id", key: "id" },
+  { title: "nombre", key: "title" },
+  { title: "habilitado", key: "enabled" },
+  { title: "categoría", key: "category" },
 ];
 
-export default function SubcategoriesPage() {
-  const subcategoriesHeaders = [
-    { title: "id", key: "id" },
-    { title: "nombre", key: "name" },
-    { title: "habilitado", key: "enabled" },
-    { title: "categoría", key: "categoryId" },
-  ];
+interface Props {
+  searchParams: {
+    page?: string;
+    take?: string;
+    query?: string;
+    sortBy?: string;
+    sortDirection?: string;
+  };
+}
+
+export default async function SubcategoriesPage({ searchParams }: Props) {
+  const param = await searchParams;
+
+  const page = paramNumber(param.page);
+  const take = paramTake(param.take);
+
+  const { data, paginationOptions } = await getSubCategories({
+    page,
+    rowsPerPage: take,
+    query: param?.query,
+    sortBy: param?.sortBy,
+    sortDirection: param?.sortDirection,
+  });
 
   return (
     <div className="container">
@@ -34,33 +51,40 @@ export default function SubcategoriesPage() {
           <SubcategoryForm isEdit={false} />
         </div>
       </div>
-      <Card className="p-5 mt-4 motion-preset-slide-up">
+      <Card className="p-5 mt-4">
         <Table>
-          <DataTableHeaders
-            headers={subcategoriesHeaders}
-            filterFunc={testFilter}
-          />
+          <DataTableHeaders headers={subcategoriesHeaders} />
           <TableBody>
-            {testData.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{item.id}</TableCell>
-                <TableCell>Test name</TableCell>
-                <TableCell>test</TableCell>
-                <TableCell>test</TableCell>
-                <TableCell className="flex flex-row justify-end">
-                  <SubcategoryForm isEdit={true} />
-                  {/*  <Button
-                    className="bg-red-500 hover:bg-red-700 ml-2"
-                    size="icon"
-                  >
-                    <Trash />
-                  </Button> */}
+            {data?.length ? (
+              data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{item.id}</TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.enabled ? <Check /> : <X />}</TableCell>
+                  <TableCell className="capitalize">
+                    {item.category.title}
+                  </TableCell>
+                  <TableCell className="flex flex-row justify-end">
+                    <SubcategoryForm isEdit={true} id={item.id} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className="font-medium text-center text-gray-500"
+                  colSpan={4}
+                >
+                  No hay registros
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
-        <DataTablePagination />
+        <DataTablePagination
+          currentPage={page}
+          totalPages={paginationOptions?.totalPages}
+        />
       </Card>
     </div>
   );
