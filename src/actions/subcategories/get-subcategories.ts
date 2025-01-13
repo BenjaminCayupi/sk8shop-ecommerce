@@ -80,8 +80,6 @@ export async function getSubCategories({
       prisma.category.count(),
     ]);
 
-    console.log("categories :", categories);
-
     return {
       data: categories,
       paginationOptions: {
