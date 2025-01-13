@@ -1,5 +1,8 @@
 "use client";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
+import { Button } from "../ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -13,10 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface Props {
   totalPages: number | undefined;
@@ -30,24 +29,34 @@ export default function DataTablePagination({
   const totalPages = totalPagesCount || 0;
   const pathname = usePathname();
   const router = useRouter();
-  const [rowPerPage, setRowPerPage] = useState("5");
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
+  const [rowPerPage, setRowPerPage] = useState(searchParams.get("take") || "5");
 
   const nextPage = () => {
     if (currentPage >= totalPages) return;
 
-    router.push(`${pathname}/?page=${currentPage + 1}`);
+    params.set("page", `${currentPage + 1}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const previousPage = () => {
     if (currentPage === 1) return;
 
-    router.push(`${pathname}/?page=${currentPage - 1}`);
+    params.set("page", `${currentPage - 1}`);
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const onRowsChange = (value: string) => {
     setRowPerPage(value);
     router.push(`${pathname}/?page=1&take=${value}`);
   };
+
+  const goToPage = (value: number) => {
+    params.set("page", value.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
   return (
     <div className="flex flex-row mt-4">
       <p className="text-[10px]">Filas por pagina</p>
@@ -77,7 +86,7 @@ export default function DataTablePagination({
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((item) => (
               <PaginationItem key={item}>
                 <PaginationLink
-                  href={`${pathname}/?page=${item}`}
+                  href={goToPage(item)}
                   isActive={currentPage === item}
                 >
                   {item}
