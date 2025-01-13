@@ -11,12 +11,18 @@ import { Check, X } from "lucide-react";
 
 const categoriesHeaders = [
   { title: "id", key: "id" },
-  { title: "nombre", key: "name" },
+  { title: "nombre", key: "title" },
   { title: "habilitado", key: "enabled" },
 ];
 
 interface Props {
-  searchParams: { page?: string; take?: string; query: string };
+  searchParams: {
+    page?: string;
+    take?: string;
+    query?: string;
+    sortBy?: string;
+    sortDirection?: string;
+  };
 }
 
 export default async function CategoriesPage({ searchParams }: Props) {
@@ -29,6 +35,8 @@ export default async function CategoriesPage({ searchParams }: Props) {
     page,
     rowsPerPage: take,
     query: param?.query,
+    sortBy: param?.sortBy,
+    sortDirection: param?.sortDirection,
   });
 
   return (
