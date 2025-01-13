@@ -39,11 +39,23 @@ export const paginationSchema = object({
   rowsPerPage: z.number().optional(),
   query: z
     .string()
-    .regex(/^[a-zA-Z0-9]+$/)
+    .regex(/^[a-zA-Z0-9 ]*$/)
     .optional(),
   sortBy: z
     .string()
     .regex(/^[a-zA-Z0-9]+$/)
     .optional(),
   sortDirection: z.enum(["asc", "desc"]).optional(),
+});
+
+export const subcategorySchema = object({
+  title: string({ required_error: "El campo es requerido" }).min(
+    4,
+    "Mínimo 4 caracteres"
+  ),
+  description: string({ required_error: "Mínimo 4 caracteres." })
+    .min(4, "Mínimo 4 caracteres.")
+    .max(40, "Máximo 40 caracteres."),
+  categoryId: string({ required_error: "El campo es requerido" }),
+  enabled: boolean(),
 });
