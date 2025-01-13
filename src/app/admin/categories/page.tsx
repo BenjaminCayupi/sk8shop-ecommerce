@@ -16,7 +16,7 @@ const categoriesHeaders = [
 ];
 
 interface Props {
-  searchParams: { page?: string; take?: string };
+  searchParams: { page?: string; take?: string; query: string };
 }
 
 export default async function CategoriesPage({ searchParams }: Props) {
@@ -28,6 +28,7 @@ export default async function CategoriesPage({ searchParams }: Props) {
   const { data, paginationOptions } = await getCategories({
     page,
     rowsPerPage: take,
+    query: param?.query,
   });
 
   return (
