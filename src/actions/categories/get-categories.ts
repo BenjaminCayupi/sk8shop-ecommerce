@@ -6,18 +6,26 @@ interface PaginationOptions {
   page?: number;
   rowsPerPage?: 5 | 10 | 15;
   enabled?: boolean;
+  query?: string;
 }
 
 export async function getCategories({
   page = 1,
   rowsPerPage = 5,
   enabled,
+  query,
 }: PaginationOptions) {
   try {
     const [categories, count] = await Promise.all([
       prisma.category.findMany({
         orderBy: { id: "desc" },
-        where: { enabled },
+        where: {
+          title: {
+            contains: query,
+            mode: "insensitive",
+          },
+          enabled,
+        },
         skip: (page - 1) * rowsPerPage,
         take: rowsPerPage,
       }),
