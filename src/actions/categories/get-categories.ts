@@ -7,6 +7,8 @@ interface PaginationOptions {
   rowsPerPage?: 5 | 10 | 15;
   enabled?: boolean;
   query?: string;
+  sortBy?: string;
+  sortDirection?: string;
 }
 
 export async function getCategories({
@@ -14,11 +16,13 @@ export async function getCategories({
   rowsPerPage = 5,
   enabled,
   query,
+  sortBy = "id",
+  sortDirection = "desc",
 }: PaginationOptions) {
   try {
     const [categories, count] = await Promise.all([
       prisma.category.findMany({
-        orderBy: { id: "desc" },
+        orderBy: { [sortBy]: sortDirection },
         where: {
           title: {
             contains: query,
