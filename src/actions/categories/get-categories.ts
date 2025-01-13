@@ -1,6 +1,8 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { paginationSchema } from "@/lib/zod";
+import { ZodError } from "zod";
 
 interface PaginationOptions {
   page?: number;
@@ -20,6 +22,14 @@ export async function getCategories({
   sortDirection = "desc",
 }: PaginationOptions) {
   try {
+    await paginationSchema.parseAsync({
+      page,
+      rowsPerPage,
+      query,
+      sortBy,
+      sortDirection,
+    });
+
     const [categories, count] = await Promise.all([
       prisma.category.findMany({
         orderBy: { [sortBy]: sortDirection },
@@ -46,10 +56,10 @@ export async function getCategories({
       },
     };
   } catch (error) {
-    if (error instanceof Error) {
+    if (error instanceof ZodError) {
       return {
         error: true,
-        message: error.message,
+        message: "Parámetro invalido",
       };
     }
 

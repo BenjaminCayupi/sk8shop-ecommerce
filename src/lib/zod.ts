@@ -1,4 +1,4 @@
-import { boolean, object, string } from "zod";
+import { boolean, object, string, z } from "zod";
 
 export const loginSchema = object({
   email: string({ required_error: "Email is required" })
@@ -32,4 +32,18 @@ export const categorySchema = object({
     .min(4, "Mínimo 4 caracteres.")
     .max(40, "Máximo 40 caracteres."),
   enabled: boolean(),
+});
+
+export const paginationSchema = object({
+  page: z.number().optional(),
+  rowsPerPage: z.number().optional(),
+  query: z
+    .string()
+    .regex(/^[a-zA-Z0-9]+$/)
+    .optional(),
+  sortBy: z
+    .string()
+    .regex(/^[a-zA-Z0-9]+$/)
+    .optional(),
+  sortDirection: z.enum(["asc", "desc"]).optional(),
 });
