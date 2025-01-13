@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import { Search } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 
 export default function DataTableFilter() {
@@ -12,7 +12,15 @@ export default function DataTableFilter() {
   const [value, setValue] = useState("");
 
   const search = () => {
-    router.push(`${pathname}/?query=${value}`);
+    if (value.trim() !== "") {
+      return router.push(`${pathname}/?query=${value}`);
+    }
+    router.push(`${pathname}`);
+  };
+
+  const clearFilters = () => {
+    setValue("");
+    router.push(`${pathname}`);
   };
 
   return (
@@ -26,6 +34,9 @@ export default function DataTableFilter() {
       />
       <Button onClick={search}>
         <Search />
+      </Button>
+      <Button variant="secondary" className="ml-2" onClick={clearFilters}>
+        <X />
       </Button>
     </div>
   );
