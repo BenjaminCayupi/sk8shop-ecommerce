@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 import { subcategorySchema } from "@/lib/zod";
 import { revalidatePath } from "next/cache";
 
-interface CategoryFields {
+interface SubcategoryFields {
   title: string;
   description: string;
   categoryId: string;
@@ -18,7 +18,7 @@ export async function createUpdateSubCategory({
   enabled,
   categoryId,
   id,
-}: CategoryFields) {
+}: SubcategoryFields) {
   try {
     await subcategorySchema.parseAsync({
       title,
