@@ -13,7 +13,8 @@ export const registerSchema = object({
   email: string({ required_error: "Email is required" })
     .trim()
     .min(1, "Email is required")
-    .email("Invalid email"),
+    .email("Invalid email")
+    .transform((val) => val.trim()),
   password: string({ required_error: "Password is required" })
     .min(1, "Password is required")
     .min(8, "Password must be more than 8 characters")
@@ -27,7 +28,8 @@ export const registerSchema = object({
 export const categorySchema = object({
   title: string({ required_error: "El campo es requerido" })
     .trim()
-    .min(4, "Mínimo 4 caracteres"),
+    .min(4, "Mínimo 4 caracteres")
+    .transform((val) => val.trim()),
   description: string({ required_error: "Mínimo 4 caracteres." })
     .min(4, "Mínimo 4 caracteres.")
     .max(40, "Máximo 40 caracteres."),
@@ -51,7 +53,8 @@ export const paginationSchema = object({
 export const subcategorySchema = object({
   title: string({ required_error: "El campo es requerido" })
     .trim()
-    .min(4, "Mínimo 4 caracteres"),
+    .min(4, "Mínimo 4 caracteres")
+    .transform((val) => val.trim()),
   description: string({ required_error: "Mínimo 4 caracteres." })
     .min(4, "Mínimo 4 caracteres.")
     .max(40, "Máximo 40 caracteres."),
@@ -63,7 +66,7 @@ export const subcategorySchema = object({
 
 export const brandSchema = object({
   title: string({ required_error: "El campo es requerido" })
-    .trim()
-    .min(4, "Mínimo 4 caracteres"),
+    .min(4, "Mínimo 4 caracteres")
+    .transform((val) => val.trim()),
   enabled: boolean(),
 });
