@@ -45,7 +45,7 @@ export async function createUpdateSubCategory({
     return {
       ok: true,
       data: result,
-      message: id ? "SubCategoría actualizada" : "SubCategoría creada",
+      message: id ? "Subcategoría actualizada" : "Subcategoría creada",
     };
   } catch {
     return {
