@@ -1,4 +1,4 @@
-import { testFilter } from "@/actions/test";
+import { getBrands } from "@/actions/brands/get-brands";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
@@ -6,21 +6,38 @@ import { BrandsForm } from "@/components/forms/brands-form";
 import PageTitle from "@/components/page-title";
 import { Card } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table";
+import { paramNumber, paramTake } from "@/utils";
+import { Check, X } from "lucide-react";
 
-const testData = [
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
-  { id: 1, name: "title" },
+const brandsHeaders = [
+  { title: "id", key: "id" },
+  { title: "nombre", key: "name" },
+  { title: "habilitado", key: "enabled" },
 ];
 
-export default function BrandsPage() {
-  const brandsHeaders = [
-    { title: "id", key: "id" },
-    { title: "nombre", key: "name" },
-    { title: "habilitado", key: "enabled" },
-  ];
+interface Props {
+  searchParams: {
+    page?: string;
+    take?: string;
+    query?: string;
+    sortBy?: string;
+    sortDirection?: string;
+  };
+}
+
+export default async function BrandsPage({ searchParams }: Props) {
+  const param = await searchParams;
+
+  const page = paramNumber(param.page);
+  const take = paramTake(param.take);
+
+  const { data, paginationOptions } = await getBrands({
+    page,
+    rowsPerPage: take,
+    query: param?.query,
+    sortBy: param?.sortBy,
+    sortDirection: param?.sortDirection,
+  });
 
   return (
     <div className="container">
@@ -35,27 +52,35 @@ export default function BrandsPage() {
       </div>
       <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
-          <DataTableHeaders headers={brandsHeaders} filterFunc={testFilter} />
+          <DataTableHeaders headers={brandsHeaders} />
           <TableBody>
-            {testData.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium">{item.id}</TableCell>
-                <TableCell>Test name</TableCell>
-                <TableCell>test</TableCell>
-                <TableCell className="flex flex-row justify-end">
-                  <BrandsForm isEdit={true} />
-                  {/*  <Button
-                    className="bg-red-500 hover:bg-red-700 ml-2"
-                    size="icon"
-                  >
-                    <Trash />
-                  </Button> */}
+            {data?.length ? (
+              data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell className="font-medium">{item.id}</TableCell>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.enabled ? <Check /> : <X />}</TableCell>
+                  <TableCell className="flex flex-row justify-end">
+                    <BrandsForm isEdit={true} id={item.id} />
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  className="font-medium text-center text-gray-500"
+                  colSpan={4}
+                >
+                  No hay registros
                 </TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
-        <DataTablePagination />
+        <DataTablePagination
+          currentPage={page}
+          totalPages={paginationOptions?.totalPages}
+        />
       </Card>
     </div>
   );
