@@ -184,14 +184,18 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
                 <Controller
                   name="categoryId"
                   control={control}
-                  rules={{ required: "El campo es requerido." }}
+                  rules={{
+                    required: "El campo es requerido.",
+                    validate: (value) =>
+                      value !== "no-fruits" || "Debe seleccionar una opción",
+                  }}
                   render={({ field }) => (
                     <Select onValueChange={field.onChange} value={field.value}>
                       <SelectTrigger className="w-full capitalize">
                         <SelectValue placeholder="Seleccionar categoría" />
                       </SelectTrigger>
                       <SelectContent>
-                        {categories &&
+                        {categories && categories.length ? (
                           categories.map((category) => (
                             <SelectItem
                               key={category.id}
@@ -200,7 +204,12 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
                             >
                               {category.title}
                             </SelectItem>
-                          ))}
+                          ))
+                        ) : (
+                          <SelectItem value="no-fruits" disabled>
+                            No hay categorías
+                          </SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                   )}

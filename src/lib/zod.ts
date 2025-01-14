@@ -56,6 +56,8 @@ export const subcategorySchema = object({
   description: string({ required_error: "Mínimo 4 caracteres." })
     .min(4, "Mínimo 4 caracteres.")
     .max(40, "Máximo 40 caracteres."),
-  categoryId: string({ required_error: "El campo es requerido" }),
+  categoryId: string({ required_error: "El campo es requerido" }).refine(
+    (value) => value !== "no-fruits"
+  ),
   enabled: boolean(),
 });
