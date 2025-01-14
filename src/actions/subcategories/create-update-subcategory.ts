@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 interface CategoryFields {
   title: string;
   description: string;
-  categoryId: number;
+  categoryId: string;
   enabled: boolean;
   id?: number;
 }
@@ -31,12 +31,12 @@ export async function createUpdateSubCategory({
 
     if (id) {
       result = await prisma.subCategory.update({
-        data: { title, description, categoryId, enabled },
+        data: { title, description, categoryId: +categoryId, enabled },
         where: { id },
       });
     } else {
       result = await prisma.subCategory.create({
-        data: { title, description, categoryId, enabled },
+        data: { title, description, categoryId: +categoryId, enabled },
       });
     }
 
