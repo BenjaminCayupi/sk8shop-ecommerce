@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { subcategorySchema } from "@/lib/zod";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { revalidatePath } from "next/cache";
 
 interface SubcategoryFields {
@@ -47,10 +48,20 @@ export async function createUpdateSubCategory({
       data: result,
       message: id ? "Subcategoría actualizada" : "Subcategoría creada",
     };
-  } catch {
+  } catch (error) {
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return {
+        ok: false,
+        message: "El valor ingresado ya existe.",
+      };
+    }
+
     return {
       ok: false,
-      message: "Hubo un error al registrar la subcategoría",
+      message: "Hubo un error al registrar la marca.",
     };
   }
 }

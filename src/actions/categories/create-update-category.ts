@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { categorySchema } from "@/lib/zod";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { revalidatePath } from "next/cache";
 
 interface CategoryFields {
@@ -45,10 +46,19 @@ export async function createUpdateCategory({
       message: id ? "Categoría actualizada" : "Categoría creada",
     };
   } catch (error) {
-    console.log("error :", error);
+    if (
+      error instanceof PrismaClientKnownRequestError &&
+      error.code === "P2002"
+    ) {
+      return {
+        ok: false,
+        message: "El valor ingresado ya existe.",
+      };
+    }
+
     return {
       ok: false,
-      message: "Hubo un error al registrar la categoría",
+      message: "Hubo un error al registrar la marca.",
     };
   }
 }
