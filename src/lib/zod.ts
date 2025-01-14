@@ -61,3 +61,11 @@ export const subcategorySchema = object({
   ),
   enabled: boolean(),
 });
+
+export const brandSchema = object({
+  title: string({ required_error: "El campo es requerido" }).min(
+    4,
+    "Mínimo 4 caracteres"
+  ),
+  enabled: boolean(),
+});
