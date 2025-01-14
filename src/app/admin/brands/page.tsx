@@ -11,7 +11,7 @@ import { Check, X } from "lucide-react";
 
 const brandsHeaders = [
   { title: "id", key: "id" },
-  { title: "nombre", key: "name" },
+  { title: "nombre", key: "title" },
   { title: "habilitado", key: "enabled" },
 ];
 
