@@ -47,8 +47,7 @@ export async function createUpdateSubCategory({
       data: result,
       message: id ? "SubCategoría actualizada" : "SubCategoría creada",
     };
-  } catch (error) {
-    console.log("error :", error);
+  } catch {
     return {
       ok: false,
       message: "Hubo un error al registrar la subcategoría",
