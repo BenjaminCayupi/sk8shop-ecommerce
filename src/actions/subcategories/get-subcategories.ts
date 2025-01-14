@@ -77,7 +77,7 @@ export async function getSubCategories({
         skip: (page - 1) * rowsPerPage,
         take: rowsPerPage,
       }),
-      prisma.category.count(),
+      prisma.subCategory.count(),
     ]);
 
     return {
