@@ -1,3 +1,4 @@
+import { getFormData } from "@/actions/subcategories/get-form-data";
 import { getSubCategories } from "@/actions/subcategories/get-subcategories";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
@@ -32,12 +33,21 @@ export default async function SubcategoriesPage({ searchParams }: Props) {
   const page = paramNumber(param.page);
   const take = paramTake(param.take);
 
-  const { data, paginationOptions } = await getSubCategories({
-    page,
-    rowsPerPage: take,
-    query: param?.query,
-    sortBy: param?.sortBy,
-    sortDirection: param?.sortDirection,
+  const { data, paginationOptions, categories } = await Promise.all([
+    getSubCategories({
+      page,
+      rowsPerPage: take,
+      query: param?.query,
+      sortBy: param?.sortBy,
+      sortDirection: param?.sortDirection,
+    }),
+    getFormData(),
+  ]).then((results) => {
+    return {
+      data: results[0].data,
+      paginationOptions: results[0].paginationOptions,
+      categories: results[1].data,
+    };
   });
 
   return (
@@ -48,7 +58,7 @@ export default async function SubcategoriesPage({ searchParams }: Props) {
           <DataTableFilter />
         </div>
         <div className="w-2/6 flex justify-end">
-          <SubcategoryForm isEdit={false} />
+          <SubcategoryForm isEdit={false} categories={categories} />
         </div>
       </div>
       <Card className="p-5 mt-4">
@@ -65,7 +75,11 @@ export default async function SubcategoriesPage({ searchParams }: Props) {
                     {item.category.title}
                   </TableCell>
                   <TableCell className="flex flex-row justify-end">
-                    <SubcategoryForm isEdit={true} id={item.id} />
+                    <SubcategoryForm
+                      isEdit={true}
+                      id={item.id}
+                      categories={categories}
+                    />
                   </TableCell>
                 </TableRow>
               ))
