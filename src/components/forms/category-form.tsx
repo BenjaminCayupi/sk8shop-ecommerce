@@ -60,11 +60,13 @@ export function CategoryForm({ isEdit, id }: Props) {
     if (!response.ok) {
       toast.error(response.message);
       setLoading(false);
+      reset();
       return;
     }
 
     setLoading(false);
     setOpen(false);
+    reset();
     toast.success(response.message);
   };
 
