@@ -13,7 +13,6 @@ const OPTIONS: Option[] = [
 
 const SizeSelect = ({}) => {
   const [value, setValue] = useState<Option[]>([]);
-  console.log("value :", value);
   return (
     <div className="w-full">
       <MultipleSelector
