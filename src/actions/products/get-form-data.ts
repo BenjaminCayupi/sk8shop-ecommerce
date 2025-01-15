@@ -15,7 +15,7 @@ export async function getFormData() {
     });
 
     const sizes = await prisma.size.findMany({
-      orderBy: { title: "asc" },
+      orderBy: { id: "asc" },
     });
 
     return {
