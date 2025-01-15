@@ -1,4 +1,4 @@
-import { testFilter } from "@/actions/test";
+import { getFormData } from "@/actions/products/get-form-data";
 import DataTableFilter from "@/components/data-table/data-table-filter";
 import DataTableHeaders from "@/components/data-table/data-table-headers";
 import DataTablePagination from "@/components/data-table/data-table-pagination";
@@ -15,12 +15,22 @@ const testData = [
   { id: 1, name: "title" },
 ];
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
   const productsHeaders = [
     { title: "id", key: "id" },
     { title: "nombre", key: "name" },
     { title: "habilitado", key: "enabled" },
   ];
+
+  const { brands, subCategories, sizes } = await Promise.all([
+    getFormData(),
+  ]).then((results) => {
+    return {
+      brands: results[0].data?.brands,
+      subCategories: results[0].data?.subCategories,
+      sizes: results[0].data?.sizes,
+    };
+  });
 
   return (
     <div className="container">
@@ -30,12 +40,17 @@ export default function ProductsPage() {
           <DataTableFilter />
         </div>
         <div className="w-2/6 flex justify-end">
-          <ProductForm isEdit={false} />
+          <ProductForm
+            isEdit={false}
+            brands={brands}
+            subCategories={subCategories}
+            sizes={sizes}
+          />
         </div>
       </div>
       <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
-          <DataTableHeaders headers={productsHeaders} filterFunc={testFilter} />
+          <DataTableHeaders headers={productsHeaders} />
           <TableBody>
             {testData.map((item, index) => (
               <TableRow key={index}>
@@ -43,7 +58,12 @@ export default function ProductsPage() {
                 <TableCell>Test name</TableCell>
                 <TableCell>test</TableCell>
                 <TableCell className="flex flex-row justify-end">
-                  <ProductForm isEdit={true} />
+                  <ProductForm
+                    isEdit={true}
+                    brands={brands}
+                    subCategories={subCategories}
+                    sizes={sizes}
+                  />
                   {/*  <Button
                     className="bg-red-500 hover:bg-red-700 ml-2"
                     size="icon"
