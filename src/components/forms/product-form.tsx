@@ -34,6 +34,7 @@ import MultipleSelector, { Option } from "../ui/multiple-selector";
 import { Badge } from "../ui/badge";
 import { createSlug } from "@/utils";
 import { Switch } from "../ui/switch";
+import { createUpdateProduct } from "@/actions/products/create-update-product";
 
 interface Props {
   isEdit: boolean;
@@ -82,7 +83,7 @@ export function ProductForm({
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    console.log("data :", data);
+    await createUpdateProduct(data);
   };
 
   const editModel = async (id: number) => {};
@@ -94,7 +95,7 @@ export function ProductForm({
   const appendQuantityFields = (options: Option[]) => {
     const formattedOptions = options.map((item) => ({
       size: item.label,
-      quantity: item.quantity ? +item.quantity : 0,
+      quantity: 0,
       sizeId: Number(item.value),
     }));
 
