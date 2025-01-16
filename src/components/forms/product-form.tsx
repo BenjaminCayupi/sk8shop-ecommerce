@@ -33,6 +33,7 @@ import { Brand, Size, SubCategory } from "@prisma/client";
 import MultipleSelector, { Option } from "../ui/multiple-selector";
 import { Badge } from "../ui/badge";
 import { createSlug } from "@/utils";
+import { Switch } from "../ui/switch";
 
 interface Props {
   isEdit: boolean;
@@ -114,7 +115,7 @@ export function ProductForm({
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md md:max-w-[800px]">
+      <DialogContent className="sm:max-w-md md:max-w-5xl">
         <form onSubmit={handleSubmit(onSubmit)}>
           <DialogHeader>
             <DialogTitle>{`${
@@ -130,8 +131,9 @@ export function ProductForm({
               <Loader2 className="motion-preset-spin" size={50} />
             </div>
           ) : (
-            <div className="grid gap-4 py-4">
-              <div className="grid grid-cols-4 items-center gap-4">
+            <div className="grid grid-cols-2 gap-4 py-4">
+              {/* Name */}
+              <div className="grid grid-cols-2 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
                   Nombre
                 </Label>
@@ -152,7 +154,8 @@ export function ProductForm({
                   </p>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* Slug */}
+              <div className="grid grid-cols-2 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
                   Slug
                 </Label>
@@ -174,7 +177,8 @@ export function ProductForm({
                   </p>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* Price */}
+              <div className="grid grid-cols-2 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
                   Precio
                 </Label>
@@ -197,32 +201,8 @@ export function ProductForm({
                   </p>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-left">
-                  Descripción
-                </Label>
-                <Textarea
-                  placeholder="Descripción de la categoría"
-                  className="col-span-3"
-                  {...register("description", {
-                    required: "El campo es requerido.",
-                    minLength: {
-                      value: 4,
-                      message: "Mínimo 4 caracteres.",
-                    },
-                    maxLength: {
-                      value: 40,
-                      message: "Máximo 40 caracteres.",
-                    },
-                  })}
-                />
-                {errors.description?.message && (
-                  <p className="text-sm text-red-400 w-full">
-                    {errors.description?.message}
-                  </p>
-                )}
-              </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* Brand */}
+              <div className="grid grid-cols-2 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
                   Marca
                 </Label>
@@ -265,7 +245,8 @@ export function ProductForm({
                   </p>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* Subcategory */}
+              <div className="grid grid-cols-2 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
                   Subcategoría
                 </Label>
@@ -308,11 +289,54 @@ export function ProductForm({
                   </p>
                 )}
               </div>
-              <Separator className="my-4" />
-              <div className="grid grid-cols-4 items-center gap-4">
+              {/* Enabled */}
+              <div className="grid items-center gap-4">
+                <Label htmlFor="airplane-mode">Habilitado</Label>
+                <Controller
+                  control={control}
+                  name="enabled"
+                  defaultValue={false}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Switch
+                      onCheckedChange={onChange}
+                      onBlur={onBlur}
+                      checked={value}
+                    />
+                  )}
+                />
+              </div>
+              {/* Description */}
+              <div className="grid col-span-2 items-center gap-4">
+                <Label htmlFor="name" className="text-left">
+                  Descripción
+                </Label>
+                <Textarea
+                  placeholder="Descripción de la categoría"
+                  className="col-span-3"
+                  {...register("description", {
+                    required: "El campo es requerido.",
+                    minLength: {
+                      value: 4,
+                      message: "Mínimo 4 caracteres.",
+                    },
+                    maxLength: {
+                      value: 40,
+                      message: "Máximo 40 caracteres.",
+                    },
+                  })}
+                />
+                {errors.description?.message && (
+                  <p className="text-sm text-red-400 w-full">
+                    {errors.description?.message}
+                  </p>
+                )}
+              </div>
+              {/* Sizes */}
+              <div className="grid col-span-2 items-center gap-4">
+                <Separator className="my-4 col-span-3" />
                 <Label
                   htmlFor="name"
-                  className="text-left align-top self-start mt-3"
+                  className="text-left align-top self-start col-span-3"
                 >
                   Tallas
                 </Label>
@@ -329,6 +353,7 @@ export function ProductForm({
                           appendQuantityFields(e);
                           return field.onChange(e);
                         }}
+                        badgeClassName="uppercase"
                         value={field.value}
                         defaultOptions={formattedSizes}
                         hidePlaceholderWhenSelected
@@ -347,32 +372,34 @@ export function ProductForm({
                       {errors.sizes?.message}
                     </p>
                   )}
-                  {fields.length > 0 &&
-                    fields.map((item, index) => (
-                      <div
-                        key={item.size}
-                        className="flex flex-row mt-4 align-middle justify-between"
-                      >
-                        <div className="w-1/6 flex">
-                          <Badge
-                            variant="outline"
-                            className="w-4/6 flex justify-center"
-                          >
-                            {item.size}
-                          </Badge>
+                  <div className="grid grid-cols-2 gap-x-3">
+                    {fields.length > 0 &&
+                      fields.map((item, index) => (
+                        <div
+                          key={item.size}
+                          className="flex flex-row mt-4 align-middle justify-between"
+                        >
+                          <div className="w-1/6 flex">
+                            <Badge
+                              variant="outline"
+                              className="w-4/6 flex justify-center"
+                            >
+                              {item.size.toUpperCase()}
+                            </Badge>
+                          </div>
+                          <Input
+                            {...register(`quantity.${index}.quantity`, {
+                              required: "El campo es requerido.",
+                              valueAsNumber: true,
+                              min: 1,
+                            })}
+                            type="number"
+                            className="w-5/6"
+                            placeholder="Cantidad"
+                          />
                         </div>
-                        <Input
-                          {...register(`quantity.${index}.quantity`, {
-                            required: "El campo es requerido.",
-                            valueAsNumber: true,
-                            min: 1,
-                          })}
-                          type="number"
-                          className="w-5/6"
-                          placeholder="Cantidad"
-                        />
-                      </div>
-                    ))}
+                      ))}
+                  </div>
                 </div>
               </div>
             </div>
