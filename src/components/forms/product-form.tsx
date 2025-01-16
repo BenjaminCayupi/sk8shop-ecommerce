@@ -15,9 +15,13 @@ import { Label } from "@/components/ui/label";
 import { Edit, Loader2, Plus } from "lucide-react";
 import { Textarea } from "../ui/textarea";
 import { Separator } from "../ui/separator";
-import SizeSelect from "../select-multiple";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import {
+  Controller,
+  SubmitHandler,
+  useFieldArray,
+  useForm,
+} from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -26,6 +30,9 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Brand, Size, SubCategory } from "@prisma/client";
+import MultipleSelector, { Option } from "../ui/multiple-selector";
+import { Badge } from "../ui/badge";
+import { createSlug } from "@/utils";
 
 interface Props {
   isEdit: boolean;
@@ -37,16 +44,23 @@ interface Props {
 
 type Inputs = {
   title: string;
+  slug: string;
   price: number;
   description: string;
   brandId: string;
   subCategoryId: string;
-  /* sizes: string[];
-  quantity: { size: string; quantity: number }; */
+  sizes: Option[];
+  quantity: { size: string; quantity: number; sizeId: number }[];
   enabled: boolean;
 };
 
-export function ProductForm({ isEdit, id, brands, subCategories }: Props) {
+export function ProductForm({
+  isEdit,
+  id,
+  brands,
+  subCategories,
+  sizes,
+}: Props) {
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -57,14 +71,34 @@ export function ProductForm({ isEdit, id, brands, subCategories }: Props) {
     formState: { errors },
     control,
     reset,
+    watch,
     setValue,
   } = useForm<Inputs>();
+
+  const { fields, replace } = useFieldArray({
+    control,
+    name: "quantity",
+  });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     console.log("data :", data);
   };
 
   const editModel = async (id: number) => {};
+
+  const formattedSizes: Option[] = sizes
+    ? sizes.map((item) => ({ value: item.id.toString(), label: item.title }))
+    : [];
+
+  const appendQuantityFields = (options: Option[]) => {
+    const formattedOptions = options.map((item) => ({
+      size: item.label,
+      quantity: item.quantity ? +item.quantity : 0,
+      sizeId: Number(item.value),
+    }));
+
+    replace(formattedOptions);
+  };
 
   return (
     <Dialog>
@@ -120,6 +154,28 @@ export function ProductForm({ isEdit, id, brands, subCategories }: Props) {
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-left">
+                  Slug
+                </Label>
+                <Input
+                  onFocus={() => setValue("slug", createSlug(watch("title")))}
+                  id="name"
+                  className="col-span-3"
+                  {...register("slug", {
+                    required: "El campo es requerido.",
+                    minLength: {
+                      value: 4,
+                      message: "Mínimo 4 caracteres.",
+                    },
+                  })}
+                />
+                {errors.slug?.message && (
+                  <p className="text-sm text-red-400 w-full">
+                    {errors.slug?.message}
+                  </p>
+                )}
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="name" className="text-left">
                   Precio
                 </Label>
                 <Input
@@ -128,6 +184,7 @@ export function ProductForm({ isEdit, id, brands, subCategories }: Props) {
                   className="col-span-3"
                   {...register("price", {
                     required: "El campo es requerido.",
+                    valueAsNumber: true,
                     min: {
                       value: 1000,
                       message: "Valor mínimo 1000",
@@ -260,7 +317,62 @@ export function ProductForm({ isEdit, id, brands, subCategories }: Props) {
                   Tallas
                 </Label>
                 <div className="col-span-3">
-                  <SizeSelect />
+                  <Controller
+                    name="sizes"
+                    control={control}
+                    rules={{
+                      required: "El campo es requerido.",
+                    }}
+                    render={({ field }) => (
+                      <MultipleSelector
+                        onChange={(e) => {
+                          appendQuantityFields(e);
+                          return field.onChange(e);
+                        }}
+                        value={field.value}
+                        defaultOptions={formattedSizes}
+                        hidePlaceholderWhenSelected
+                        placeholder="Seleccionar tallas"
+                        creatable
+                        emptyIndicator={
+                          <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
+                            No quedan tallas
+                          </p>
+                        }
+                      />
+                    )}
+                  />
+                  {errors.sizes?.message && (
+                    <p className="text-sm text-red-400 w-full">
+                      {errors.sizes?.message}
+                    </p>
+                  )}
+                  {fields.length > 0 &&
+                    fields.map((item, index) => (
+                      <div
+                        key={item.size}
+                        className="flex flex-row mt-4 align-middle justify-between"
+                      >
+                        <div className="w-1/6 flex">
+                          <Badge
+                            variant="outline"
+                            className="w-4/6 flex justify-center"
+                          >
+                            {item.size}
+                          </Badge>
+                        </div>
+                        <Input
+                          {...register(`quantity.${index}.quantity`, {
+                            required: "El campo es requerido.",
+                            valueAsNumber: true,
+                            min: 1,
+                          })}
+                          type="number"
+                          className="w-5/6"
+                          placeholder="Cantidad"
+                        />
+                      </div>
+                    ))}
                 </div>
               </div>
             </div>
