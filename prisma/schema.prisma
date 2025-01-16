@@ -60,6 +60,7 @@ model Product {
   slug          String         @unique
   price         Int
   description   String
+  enabled       Boolean        @default(true)
   gender        Gender
   brand         Brand          @relation(fields: [brandId], references: [id])
   brandId       Int
