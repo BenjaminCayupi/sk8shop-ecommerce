@@ -21,10 +21,10 @@ export async function getFormData() {
     return {
       data: { brands, subCategories, sizes },
     };
-  } catch (error) {
-    console.log("error :", error);
+  } catch {
     return {
       ok: false,
+      message: "Ha ocurrido un error desconocido ",
     };
   }
 }
