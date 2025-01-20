@@ -36,6 +36,8 @@ import { createSlug } from "@/utils";
 import { Switch } from "../ui/switch";
 import { createUpdateProduct } from "@/actions/products/create-update-product";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { getProduct } from "@/actions/products/get-product";
+import toast from "react-hot-toast";
 
 interface Props {
   isEdit: boolean;
@@ -84,10 +86,69 @@ export function ProductForm({
   });
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await createUpdateProduct(data);
+    setLoading(true);
+    let response;
+
+    if (isEdit) {
+      response = await createUpdateProduct({ ...data, id });
+    } else {
+      response = await createUpdateProduct(data);
+    }
+
+    if (!response.ok) {
+      toast.error(response.message);
+      setLoading(false);
+      reset();
+      return;
+    }
+
+    setLoading(false);
+    setOpen(false);
+    reset();
+    toast.success(response.message);
   };
 
-  const editModel = async (id: number) => {};
+  const editModal = async (id: number) => {
+    setOpen(true);
+    setFormLoading(true);
+
+    const response = await getProduct(id);
+
+    if (!response.ok) {
+      toast.error(response.message);
+    }
+
+    setValue("title", response.data!.title, { shouldValidate: true });
+    setValue("slug", response.data!.slug, { shouldValidate: true });
+    setValue("price", response.data!.price, { shouldValidate: true });
+    setValue("brandId", response.data!.brandId.toString(), {
+      shouldValidate: true,
+    });
+    setValue("subCategoryId", response.data!.subCategoryId.toString());
+    setValue("enabled", response.data!.enabled, { shouldValidate: true });
+    setValue("description", response.data!.description, {
+      shouldValidate: true,
+    });
+    setValue(
+      "sizes",
+      response.data!.Inventory.map((item) => ({
+        value: item.size.id.toString(),
+        label: item.size.title,
+      }))
+    );
+
+    const options = response.data?.Inventory.map((item) => ({
+      size: item.size.title,
+      quantity: item.quantity,
+      sizeId: item.size.id,
+    }));
+
+    if (options) {
+      replace(options);
+    }
+
+    setFormLoading(false);
+  };
 
   const formattedSizes: Option[] = sizes
     ? sizes.map((item) => ({ value: item.id.toString(), label: item.title }))
@@ -104,10 +165,10 @@ export function ProductForm({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
         {isEdit ? (
-          <Button size="icon" onClick={() => id !== undefined && editModel(id)}>
+          <Button size="icon" onClick={() => id !== undefined && editModal(id)}>
             <Edit />
           </Button>
         ) : (
@@ -416,11 +477,21 @@ export function ProductForm({
           )}
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="secondary" className="mr-2">
+              <Button
+                type="button"
+                variant="secondary"
+                className="mr-2"
+                disabled={loading}
+                onClick={() => {
+                  reset();
+                  setOpen(false);
+                }}
+              >
                 Cerrar
               </Button>
             </DialogClose>
-            <Button type="submit" className="mb-2 ">
+            <Button type="submit" disabled={loading}>
+              {loading && <Loader2 className="animate-spin" />}
               Guardar
             </Button>
           </DialogFooter>
