@@ -85,6 +85,12 @@ export function ProductForm({
     name: "quantity",
   });
 
+  const resetForm = () => {
+    reset();
+    replace([]);
+    setValue("sizes", []);
+  };
+
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     let response;
@@ -98,13 +104,12 @@ export function ProductForm({
     if (!response.ok) {
       toast.error(response.message);
       setLoading(false);
-      reset();
       return;
     }
 
     setLoading(false);
     setOpen(false);
-    reset();
+    resetForm();
     toast.success(response.message);
   };
 
@@ -483,7 +488,7 @@ export function ProductForm({
                 className="mr-2"
                 disabled={loading}
                 onClick={() => {
-                  reset();
+                  resetForm();
                   setOpen(false);
                 }}
               >
