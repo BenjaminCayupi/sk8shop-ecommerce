@@ -169,6 +169,8 @@ export function ProductForm({
     replace(formattedOptions);
   };
 
+  console.log("TEST CONSOLE LOG");
+
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
       <DialogTrigger asChild>
