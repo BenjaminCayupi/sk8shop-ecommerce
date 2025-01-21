@@ -167,15 +167,19 @@ export function ProductForm({
     }));
 
     if (id) {
-      const currentFields = fields.map(({ size, quantity, sizeId }) => ({
-        size,
-        quantity,
-        sizeId,
-      }));
-      return replace([
-        ...currentFields,
-        formattedOptions[formattedOptions.length - 1],
-      ]);
+      const currentFields = options.map((item) => {
+        const exist = fields.find(
+          (field) => field.sizeId === Number(item.value)
+        );
+
+        if (!exist) {
+          return { size: item.label, quantity: 0, sizeId: Number(item.value) };
+        }
+
+        return exist;
+      });
+
+      return replace(currentFields);
     }
 
     replace(formattedOptions);
