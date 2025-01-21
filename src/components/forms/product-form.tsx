@@ -166,10 +166,20 @@ export function ProductForm({
       sizeId: Number(item.value),
     }));
 
+    if (id) {
+      const currentFields = fields.map(({ size, quantity, sizeId }) => ({
+        size,
+        quantity,
+        sizeId,
+      }));
+      return replace([
+        ...currentFields,
+        formattedOptions[formattedOptions.length - 1],
+      ]);
+    }
+
     replace(formattedOptions);
   };
-
-  console.log("TEST CONSOLE LOG");
 
   return (
     <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
