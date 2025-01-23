@@ -63,7 +63,7 @@ export default async function Navbar() {
                 <ModeToggle />
               </TooltipTrigger>
               <TooltipContent sideOffset={2}>
-                <p className="bg-black text-white rounded-md transition-all text-xs">
+                <p className="text-white dark:text-black rounded-md transition-all text-xs">
                   Cambiar tema
                 </p>
               </TooltipContent>
@@ -81,7 +81,7 @@ export default async function Navbar() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent sideOffset={2}>
-                <p className="bg-black text-white rounded-md transition-all text-xs">
+                <p className="text-white dark:text-black rounded-md transition-all text-xs">
                   Favoritos
                 </p>
               </TooltipContent>
@@ -97,7 +97,7 @@ export default async function Navbar() {
                 </Link>
               </TooltipTrigger>
               <TooltipContent>
-                <p className="bg-black text-white rounded-md transition-all text-xs">
+                <p className="text-white dark:text-black rounded-md transition-all text-xs">
                   Carro
                 </p>
               </TooltipContent>
