@@ -31,7 +31,7 @@ export async function createUpdateProduct({
     //Validate fields
     const transaction = await prisma.$transaction(async (tx) => {
       /* ---------- Create sizes if they don't exist ---------- */
-      const formatSizes = sizes.map((item) => item.label);
+      const formatSizes = sizes.map((item) => item.label.toUpperCase());
       const existingSizes = await tx.size.findMany({
         where: {
           title: { in: formatSizes },
@@ -88,7 +88,9 @@ export async function createUpdateProduct({
       });
       const totalSizes = [...existingSizes, ...newSizes];
       const inventoryData = quantity.map((qty) => {
-        const size = totalSizes.find((item) => item.title === qty.size);
+        const size = totalSizes.find(
+          (item) => item.title === qty.size.toUpperCase()
+        );
         return {
           productId: product.id,
           quantity: qty.quantity,
@@ -96,7 +98,45 @@ export async function createUpdateProduct({
         };
       });
 
-      const inventory = await tx.inventory.createMany({ data: inventoryData });
+      let inventory;
+
+      if (id) {
+        const productInventory = await tx.inventory.findMany({
+          where: { productId: id },
+        });
+
+        const toDeleteItems = productInventory.filter(
+          (item) => !quantity.some((data) => data.sizeId === item.sizeId)
+        );
+
+        if (toDeleteItems.length > 0) {
+          await tx.inventory.deleteMany({
+            where: { id: { in: toDeleteItems.map((item) => item.id) } },
+          });
+        }
+
+        inventory = await Promise.all(
+          inventoryData.map((item) =>
+            tx.inventory.upsert({
+              where: {
+                productId_sizeId: {
+                  productId: item.productId,
+                  sizeId: item.sizeId,
+                },
+              },
+              update: { quantity: item.quantity },
+              create: {
+                quantity: item.quantity,
+                sizeId: item.sizeId,
+                productId: item.productId,
+              },
+            })
+          )
+        );
+      } else {
+        inventory = await tx.inventory.createMany({ data: inventoryData });
+      }
+
       /* Upload Image */
       /* Create productImage record */
 
@@ -110,10 +150,16 @@ export async function createUpdateProduct({
       ok: true,
       product: transaction.product,
       inventory: transaction.inventory,
+      message: `Producto ${id ? "editado" : "creado"} correctamente`,
     };
   } catch (error) {
     if (error instanceof Error) {
       console.log("error :", error.message);
     }
+
+    return {
+      ok: false,
+      message: "Hubo un error al registrar el producto.",
+    };
   }
 }
