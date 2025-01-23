@@ -19,13 +19,13 @@ export default async function Navbar() {
   const session = await auth();
 
   return (
-    <nav className="shadow-md motion-preset-slide-down">
+    <nav className="shadow-md">
       <div className="container py-3">
         <div className="flex flex-col items-center md:p-4">
           {/* Logo and Menu Button Mobile */}
           <div className="flex w-full justify-between items-center md:justify-center">
             <NavbarMobile session={session} />
-            <div className="text-2xl font-bold">
+            <div className="text-2xl font-bold motion-preset-slide-down">
               <Link href="/">
                 <Image
                   src={logoBlack}
