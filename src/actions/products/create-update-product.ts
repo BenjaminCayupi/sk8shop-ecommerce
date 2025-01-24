@@ -1,6 +1,7 @@
 "use server";
 
 import prisma from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 
 interface ProductFields {
   title: string;
@@ -145,6 +146,8 @@ export async function createUpdateProduct({
         inventory,
       };
     });
+
+    revalidatePath("/admin/products");
 
     return {
       ok: true,
