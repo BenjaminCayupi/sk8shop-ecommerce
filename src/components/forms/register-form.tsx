@@ -88,8 +88,8 @@ export default function RegisterForm() {
                         message: "Mínimo 3 caracteres",
                       },
                       maxLength: {
-                        value: 10,
-                        message: "Máximo 3 caracteres",
+                        value: 15,
+                        message: "Máximo 15 caracteres",
                       },
                     })}
                   />
