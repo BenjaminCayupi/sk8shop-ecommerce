@@ -61,7 +61,7 @@ export default async function SubcategoriesPage({ searchParams }: Props) {
           <SubcategoryForm isEdit={false} categories={categories} />
         </div>
       </div>
-      <Card className="p-5 mt-4">
+      <Card className="p-5 mt-4 motion-preset-slide-up">
         <Table>
           <DataTableHeaders headers={subcategoriesHeaders} />
           <TableBody>
