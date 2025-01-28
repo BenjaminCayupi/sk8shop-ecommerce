@@ -36,7 +36,9 @@ export default async function registerUser({ name, email, password }: Params) {
       data: createdUser,
     };
   } catch (error) {
-    console.log("error :", error);
+    if (error instanceof Error) {
+      console.error("Error registering user: ", error.message);
+    }
     return {
       ok: false,
       message: "Hubo un error al registrar usuario",
