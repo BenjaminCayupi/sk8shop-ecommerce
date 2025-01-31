@@ -57,6 +57,7 @@ type Inputs = {
   sizes: Option[];
   quantity: { size: string; quantity: number; sizeId: number }[];
   enabled: boolean;
+  images?: FileList;
 };
 
 export function ProductForm({
@@ -419,6 +420,41 @@ export function ProductForm({
                   {errors.description?.message && (
                     <p className="text-sm text-red-400 w-full">
                       {errors.description?.message}
+                    </p>
+                  )}
+                </div>
+                {/* Images */}
+                <div className="grid col-span-2 items-center gap-4">
+                  <Separator className="my-4 col-span-3" />
+                  <Label
+                    htmlFor="picture"
+                    className="text-left align-top self-start col-span-3"
+                  >
+                    Imágenes
+                  </Label>
+                  <Controller
+                    name="images"
+                    control={control}
+                    defaultValue={undefined}
+                    rules={{
+                      validate: (files) =>
+                        (files && files.length <= 2) ||
+                        "Solo puedes subir un máximo de 2 archivos.",
+                    }}
+                    render={({ field }) => (
+                      <Input
+                        id="picture"
+                        type="file"
+                        multiple
+                        onChange={(e) => field.onChange(e.target.files)}
+                        ref={field.ref}
+                        className="w-full col-span-3"
+                      />
+                    )}
+                  />
+                  {errors.images?.message && (
+                    <p className="text-sm text-red-400 w-full">
+                      {errors.images?.message}
                     </p>
                   )}
                 </div>
