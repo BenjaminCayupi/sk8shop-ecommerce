@@ -13,6 +13,7 @@ export async function getProduct(id: number) {
             size: true,
           },
         },
+        ProductImage: true,
       },
     });
     return {
