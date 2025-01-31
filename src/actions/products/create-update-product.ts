@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
+import { uploadProductImages } from "./upload-image";
 
 interface ProductFields {
   title: string;
@@ -14,6 +15,7 @@ interface ProductFields {
   quantity: { size: string; quantity: number; sizeId: number }[];
   enabled: boolean;
   id?: number;
+  images?: FileList;
 }
 
 export async function createUpdateProduct({
@@ -26,6 +28,7 @@ export async function createUpdateProduct({
   sizes,
   quantity,
   enabled,
+  images,
   id,
 }: ProductFields) {
   try {
@@ -65,6 +68,7 @@ export async function createUpdateProduct({
             enabled,
           },
           where: { id },
+          include: { ProductImage: true },
         });
       } else {
         product = await tx.product.create({
@@ -78,6 +82,7 @@ export async function createUpdateProduct({
             subCategoryId: +subCategoryId,
             enabled,
           },
+          include: { ProductImage: true },
         });
       }
       /* ---------- Create Inventory record ---------- */
@@ -139,7 +144,24 @@ export async function createUpdateProduct({
       }
 
       /* Upload Image */
-      /* Create productImage record */
+      if (images) {
+        const response = await uploadProductImages(images);
+
+        if (!response) {
+          throw new Error("Hubo un error al cargar las imágenes");
+        }
+
+        const productImages = response
+          .filter((item) => item !== null)
+          .map((item) => ({
+            productId: product.id,
+            url: item as string,
+          }));
+
+        await tx.productImage.createMany({
+          data: productImages,
+        });
+      }
 
       return {
         product,
