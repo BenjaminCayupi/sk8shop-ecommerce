@@ -14,17 +14,20 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ShopLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(() => {
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
     const storedValue = localStorage.getItem("sidebarOpen");
-    return storedValue ? JSON.parse(storedValue) : true;
-  });
+    const value = storedValue ? JSON.parse(storedValue) : true;
+    setSidebarOpen(value);
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen((prev: boolean) => {
