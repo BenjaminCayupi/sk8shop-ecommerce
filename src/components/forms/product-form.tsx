@@ -38,6 +38,8 @@ import { createUpdateProduct } from "@/actions/products/create-update-product";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { getProduct } from "@/actions/products/get-product";
 import toast from "react-hot-toast";
+import { ImagePreview } from "../image-preview";
+import { deleteProductImage } from "@/actions/products/remove-image";
 
 interface Props {
   isEdit: boolean;
@@ -70,6 +72,9 @@ export function ProductForm({
   const [loading, setLoading] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [open, setOpen] = useState(false);
+  const [previews, setPreviews] = useState<
+    { id: number; url: string; productId: number }[]
+  >([]);
 
   const {
     register,
@@ -90,6 +95,7 @@ export function ProductForm({
     reset();
     replace([]);
     setValue("sizes", []);
+    setPreviews([]);
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
@@ -143,6 +149,10 @@ export function ProductForm({
       }))
     );
 
+    if (response.data?.ProductImage.length) {
+      setPreviews(response.data?.ProductImage);
+    }
+
     const options = response.data?.Inventory.map((item) => ({
       size: item.size.title,
       quantity: item.quantity,
@@ -184,6 +194,19 @@ export function ProductForm({
     }
 
     replace(formattedOptions);
+  };
+
+  const deleteImage = async (imageId: number, imageUrl: string) => {
+    setLoading(true);
+    const response = await deleteProductImage(imageId, imageUrl);
+
+    if (!response.ok) {
+      setLoading(false);
+      return toast.error("Hubo un error al eliminar la imagen.");
+    }
+
+    setLoading(false);
+    setPreviews([]);
   };
 
   return (
@@ -449,6 +472,7 @@ export function ProductForm({
                         onChange={(e) => field.onChange(e.target.files)}
                         ref={field.ref}
                         className="w-full col-span-3"
+                        disabled={previews.length >= 2}
                       />
                     )}
                   />
@@ -458,6 +482,17 @@ export function ProductForm({
                     </p>
                   )}
                 </div>
+
+                {previews.length > 0 && (
+                  <div className="grid col-span-2 items-center gap-4">
+                    <ImagePreview
+                      previews={previews}
+                      deleteImage={deleteImage}
+                      loading={loading}
+                    />
+                  </div>
+                )}
+
                 {/* Sizes */}
                 <div className="grid col-span-2 items-center gap-4 mb-10">
                   <Separator className="my-4 col-span-3" />
