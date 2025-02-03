@@ -461,13 +461,17 @@ export function ProductForm({
                     defaultValue={undefined}
                     rules={{
                       validate: (files) =>
-                        (files && files.length <= 2) ||
-                        "Solo puedes subir un máximo de 2 archivos.",
+                        (files &&
+                          files.length <= 2 &&
+                          previews.length >= 2 &&
+                          previews.length + files.length >= 2) ||
+                        "Solo puedes subir un máximo de 2 archivos en total.",
                     }}
                     render={({ field }) => (
                       <Input
                         id="picture"
                         type="file"
+                        accept="image/png, image/jpg, image/jpeg"
                         multiple
                         onChange={(e) => field.onChange(e.target.files)}
                         ref={field.ref}
