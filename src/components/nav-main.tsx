@@ -18,6 +18,7 @@ import {
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function NavMain({
   items,
@@ -33,6 +34,15 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const pathname = usePathname();
+
+  const isRouteActive = (url: string) => {
+    const currentPath = pathname.split("/admin/")[1];
+    const urlPath = url.split("/admin/")[1];
+
+    return currentPath === urlPath;
+  };
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Plataforma</SidebarGroupLabel>
@@ -56,7 +66,10 @@ export function NavMain({
                 <SidebarMenuSub>
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
-                      <SidebarMenuSubButton asChild>
+                      <SidebarMenuSubButton
+                        isActive={isRouteActive(subItem.url)}
+                        asChild
+                      >
                         <Link href={subItem.url}>
                           <span>{subItem.title}</span>
                         </Link>
