@@ -321,7 +321,7 @@ export function ProductForm({
                         <SelectItem
                           key={brand.id}
                           value={brand.id.toString()}
-                          className="capitalize"
+                          className="capitalize cursor-pointer"
                         >
                           {brand.title}
                         </SelectItem>
@@ -365,7 +365,7 @@ export function ProductForm({
                         <SelectItem
                           key={subCategory.id}
                           value={subCategory.id.toString()}
-                          className="capitalize"
+                          className="capitalize cursor-pointer"
                         >
                           {subCategory.title}
                         </SelectItem>
