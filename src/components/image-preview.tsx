@@ -4,10 +4,7 @@ import { Loader2, X } from "lucide-react";
 
 interface Props {
   previews: { id: number; url: string; productId: number }[];
-  deleteImage: (
-    imageId: number,
-    imageUrl: string
-  ) => Promise<string | undefined>;
+  deleteImage: (imageId: number, imageUrl: string) => Promise<void>;
   loading: boolean;
 }
 
@@ -17,7 +14,7 @@ export function ImagePreview({ previews, deleteImage, loading }: Props) {
       {previews.map((preview, index) => (
         <div key={index} className="relative w-[150px] h-[150px]">
           <Image
-            src={preview.url || "/placeholder.svg"}
+            src={preview.url}
             alt={`Preview ${index + 1}`}
             className="w-[150px] h-[150px] object-cover rounded-md"
             width={0}
