@@ -1,20 +1,12 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { createUpdateProduct } from "@/actions/products/create-update-product";
+import { getProduct } from "@/actions/products/get-product";
+import { deleteProductImage } from "@/actions/products/remove-image";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Edit, Loader2, Plus } from "lucide-react";
-import { Textarea } from "../ui/textarea";
-import { Separator } from "../ui/separator";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { createSlug } from "@/utils";
+import { Brand, Size, SubCategory } from "@prisma/client";
 import { useState } from "react";
 import {
   Controller,
@@ -22,6 +14,10 @@ import {
   useFieldArray,
   useForm,
 } from "react-hook-form";
+import toast from "react-hot-toast";
+import { ImagePreview } from "../image-preview";
+import { Badge } from "../ui/badge";
+import MultipleSelector, { Option } from "../ui/multiple-selector";
 import {
   Select,
   SelectContent,
@@ -29,17 +25,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { Brand, Size, SubCategory } from "@prisma/client";
-import MultipleSelector, { Option } from "../ui/multiple-selector";
-import { Badge } from "../ui/badge";
-import { createSlug } from "@/utils";
+import { Separator } from "../ui/separator";
 import { Switch } from "../ui/switch";
-import { createUpdateProduct } from "@/actions/products/create-update-product";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { getProduct } from "@/actions/products/get-product";
-import toast from "react-hot-toast";
-import { ImagePreview } from "../image-preview";
-import { deleteProductImage } from "@/actions/products/remove-image";
+import { Textarea } from "../ui/textarea";
+import FormDialog from "./form-dialog";
 
 interface Props {
   isEdit: boolean;
@@ -209,390 +198,356 @@ export function ProductForm({
     setPreviews([]);
   };
 
+  const validateFiles = (files: FileList | undefined) => {
+    if (!files && !previews.length) return false;
+
+    if (files && previews.length) {
+      const totalFiles = files.length + previews.length;
+
+      return totalFiles <= 2;
+    }
+
+    return (files?.length ?? 0) <= 2;
+  };
+
   return (
-    <Dialog open={open} onOpenChange={(value) => setOpen(value)}>
-      <DialogTrigger asChild>
-        {isEdit ? (
-          <Button size="icon" onClick={() => id !== undefined && editModal(id)}>
-            <Edit />
-          </Button>
-        ) : (
-          <Button onClick={() => setOpen(true)}>
-            <Plus />
-            Agregar
-          </Button>
-        )}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-md md:max-w-5xl">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader>
-            <DialogTitle>{`${
-              isEdit ? "Editar" : "Crear"
-            } Producto`}</DialogTitle>
-            <DialogDescription>
-              Haz cambios en tus productos aquí. Oprime guardar cuando estés
-              listo.
-            </DialogDescription>
-          </DialogHeader>
-          {formLoading ? (
-            <div className="w-full h-[250px] content-center justify-items-center">
-              <Loader2 className="motion-preset-spin" size={50} />
+    <FormDialog
+      open={open}
+      onOpenChange={setOpen}
+      isEdit={isEdit}
+      id={id}
+      toggleEdit={editModal}
+      openModal={() => setOpen(true)}
+      loading={loading}
+      formLoading={formLoading}
+      closeForm={() => {
+        setOpen(false);
+        resetForm();
+      }}
+      onSubmit={handleSubmit(onSubmit)}
+    >
+      <ScrollArea className="h-[500px] w-full border-0 p-2">
+        <div className="grid grid-cols-2 gap-4 py-4 p-2">
+          {/* Name */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Nombre
+            </Label>
+            <Input
+              id="name"
+              className="col-span-3"
+              {...register("title", {
+                required: "El campo es requerido.",
+                minLength: {
+                  value: 4,
+                  message: "Mínimo 4 caracteres.",
+                },
+              })}
+            />
+            {errors.title?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.title?.message}
+              </p>
+            )}
+          </div>
+          {/* Slug */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Slug
+            </Label>
+            <Input
+              onFocus={() => setValue("slug", createSlug(watch("title")))}
+              id="name"
+              className="col-span-3"
+              {...register("slug", {
+                required: "El campo es requerido.",
+                minLength: {
+                  value: 4,
+                  message: "Mínimo 4 caracteres.",
+                },
+              })}
+            />
+            {errors.slug?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.slug?.message}
+              </p>
+            )}
+          </div>
+          {/* Price */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Precio
+            </Label>
+            <Input
+              id="name"
+              type="number"
+              className="col-span-3"
+              {...register("price", {
+                required: "El campo es requerido.",
+                valueAsNumber: true,
+                min: {
+                  value: 1000,
+                  message: "Valor mínimo 1000",
+                },
+              })}
+            />
+            {errors.price?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.price?.message}
+              </p>
+            )}
+          </div>
+          {/* Brand */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Marca
+            </Label>
+            <Controller
+              name="brandId"
+              control={control}
+              rules={{
+                required: "El campo es requerido.",
+                validate: (value) =>
+                  value !== "no-fruits" || "Debe seleccionar una opción",
+              }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="w-full capitalize col-span-3">
+                    <SelectValue placeholder="Seleccionar marca" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {brands && brands.length ? (
+                      brands.map((brand) => (
+                        <SelectItem
+                          key={brand.id}
+                          value={brand.id.toString()}
+                          className="capitalize"
+                        >
+                          {brand.title}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-fruits" disabled>
+                        No hay marcas
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.brandId?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.brandId?.message}
+              </p>
+            )}
+          </div>
+          {/* Subcategory */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Subcategoría
+            </Label>
+            <Controller
+              name="subCategoryId"
+              control={control}
+              rules={{
+                required: "El campo es requerido.",
+                validate: (value) =>
+                  value !== "no-fruits" || "Debe seleccionar una opción",
+              }}
+              render={({ field }) => (
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger className="w-full capitalize col-span-3">
+                    <SelectValue placeholder="Seleccionar categoría" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {subCategories && subCategories.length ? (
+                      subCategories.map((subCategory) => (
+                        <SelectItem
+                          key={subCategory.id}
+                          value={subCategory.id.toString()}
+                          className="capitalize"
+                        >
+                          {subCategory.title}
+                        </SelectItem>
+                      ))
+                    ) : (
+                      <SelectItem value="no-fruits" disabled>
+                        No hay subcategorías
+                      </SelectItem>
+                    )}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.subCategoryId?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.subCategoryId?.message}
+              </p>
+            )}
+          </div>
+          {/* Enabled */}
+          <div className="grid items-center gap-4">
+            <Label htmlFor="airplane-mode">Habilitado</Label>
+            <Controller
+              control={control}
+              name="enabled"
+              defaultValue={false}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <Switch
+                  onCheckedChange={onChange}
+                  onBlur={onBlur}
+                  checked={value}
+                />
+              )}
+            />
+          </div>
+          {/* Description */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Label htmlFor="name" className="text-left">
+              Descripción
+            </Label>
+            <Textarea
+              placeholder="Descripción de la categoría"
+              className="col-span-3"
+              {...register("description", {
+                required: "El campo es requerido.",
+                minLength: {
+                  value: 4,
+                  message: "Mínimo 4 caracteres.",
+                },
+                maxLength: {
+                  value: 40,
+                  message: "Máximo 40 caracteres.",
+                },
+              })}
+            />
+            {errors.description?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.description?.message}
+              </p>
+            )}
+          </div>
+          {/* Images */}
+          <div className="grid col-span-2 items-center gap-4">
+            <Separator className="my-4 col-span-3" />
+            <Label
+              htmlFor="picture"
+              className="text-left align-top self-start col-span-3"
+            >
+              Imágenes
+            </Label>
+            <Controller
+              name="images"
+              control={control}
+              defaultValue={undefined}
+              rules={{
+                validate: (files) =>
+                  validateFiles(files) ||
+                  "Solo puedes subir un máximo de 2 archivos en total.",
+              }}
+              render={({ field }) => (
+                <Input
+                  id="picture"
+                  type="file"
+                  accept="image/png, image/jpg, image/jpeg"
+                  multiple
+                  onChange={(e) => field.onChange(e.target.files)}
+                  ref={field.ref}
+                  className="w-full col-span-3"
+                  disabled={previews.length >= 2}
+                />
+              )}
+            />
+            {errors.images?.message && (
+              <p className="text-sm text-red-400 w-full">
+                {errors.images?.message}
+              </p>
+            )}
+          </div>
+
+          {previews.length > 0 && (
+            <div className="grid col-span-2 items-center gap-4">
+              <ImagePreview
+                previews={previews}
+                deleteImage={deleteImage}
+                loading={loading}
+              />
             </div>
-          ) : (
-            <ScrollArea className="h-[500px] w-full border-0 p-2">
-              <div className="grid grid-cols-2 gap-4 py-4 p-2">
-                {/* Name */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Nombre
-                  </Label>
-                  <Input
-                    id="name"
-                    className="col-span-3"
-                    {...register("title", {
-                      required: "El campo es requerido.",
-                      minLength: {
-                        value: 4,
-                        message: "Mínimo 4 caracteres.",
-                      },
-                    })}
-                  />
-                  {errors.title?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.title?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Slug */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Slug
-                  </Label>
-                  <Input
-                    onFocus={() => setValue("slug", createSlug(watch("title")))}
-                    id="name"
-                    className="col-span-3"
-                    {...register("slug", {
-                      required: "El campo es requerido.",
-                      minLength: {
-                        value: 4,
-                        message: "Mínimo 4 caracteres.",
-                      },
-                    })}
-                  />
-                  {errors.slug?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.slug?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Price */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Precio
-                  </Label>
-                  <Input
-                    id="name"
-                    type="number"
-                    className="col-span-3"
-                    {...register("price", {
-                      required: "El campo es requerido.",
-                      valueAsNumber: true,
-                      min: {
-                        value: 1000,
-                        message: "Valor mínimo 1000",
-                      },
-                    })}
-                  />
-                  {errors.price?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.price?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Brand */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Marca
-                  </Label>
-                  <Controller
-                    name="brandId"
-                    control={control}
-                    rules={{
-                      required: "El campo es requerido.",
-                      validate: (value) =>
-                        value !== "no-fruits" || "Debe seleccionar una opción",
-                    }}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full capitalize col-span-3">
-                          <SelectValue placeholder="Seleccionar marca" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {brands && brands.length ? (
-                            brands.map((brand) => (
-                              <SelectItem
-                                key={brand.id}
-                                value={brand.id.toString()}
-                                className="capitalize"
-                              >
-                                {brand.title}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem value="no-fruits" disabled>
-                              No hay marcas
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.brandId?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.brandId?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Subcategory */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Subcategoría
-                  </Label>
-                  <Controller
-                    name="subCategoryId"
-                    control={control}
-                    rules={{
-                      required: "El campo es requerido.",
-                      validate: (value) =>
-                        value !== "no-fruits" || "Debe seleccionar una opción",
-                    }}
-                    render={({ field }) => (
-                      <Select
-                        onValueChange={field.onChange}
-                        value={field.value}
-                      >
-                        <SelectTrigger className="w-full capitalize col-span-3">
-                          <SelectValue placeholder="Seleccionar categoría" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {subCategories && subCategories.length ? (
-                            subCategories.map((subCategory) => (
-                              <SelectItem
-                                key={subCategory.id}
-                                value={subCategory.id.toString()}
-                                className="capitalize"
-                              >
-                                {subCategory.title}
-                              </SelectItem>
-                            ))
-                          ) : (
-                            <SelectItem value="no-fruits" disabled>
-                              No hay subcategorías
-                            </SelectItem>
-                          )}
-                        </SelectContent>
-                      </Select>
-                    )}
-                  />
-                  {errors.subCategoryId?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.subCategoryId?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Enabled */}
-                <div className="grid items-center gap-4">
-                  <Label htmlFor="airplane-mode">Habilitado</Label>
-                  <Controller
-                    control={control}
-                    name="enabled"
-                    defaultValue={false}
-                    render={({ field: { onChange, onBlur, value } }) => (
-                      <Switch
-                        onCheckedChange={onChange}
-                        onBlur={onBlur}
-                        checked={value}
-                      />
-                    )}
-                  />
-                </div>
-                {/* Description */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Label htmlFor="name" className="text-left">
-                    Descripción
-                  </Label>
-                  <Textarea
-                    placeholder="Descripción de la categoría"
-                    className="col-span-3"
-                    {...register("description", {
-                      required: "El campo es requerido.",
-                      minLength: {
-                        value: 4,
-                        message: "Mínimo 4 caracteres.",
-                      },
-                      maxLength: {
-                        value: 40,
-                        message: "Máximo 40 caracteres.",
-                      },
-                    })}
-                  />
-                  {errors.description?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.description?.message}
-                    </p>
-                  )}
-                </div>
-                {/* Images */}
-                <div className="grid col-span-2 items-center gap-4">
-                  <Separator className="my-4 col-span-3" />
-                  <Label
-                    htmlFor="picture"
-                    className="text-left align-top self-start col-span-3"
-                  >
-                    Imágenes
-                  </Label>
-                  <Controller
-                    name="images"
-                    control={control}
-                    defaultValue={undefined}
-                    rules={{
-                      validate: (files) =>
-                        (files &&
-                          files.length <= 2 &&
-                          previews.length >= 2 &&
-                          previews.length + files.length >= 2) ||
-                        "Solo puedes subir un máximo de 2 archivos en total.",
-                    }}
-                    render={({ field }) => (
-                      <Input
-                        id="picture"
-                        type="file"
-                        accept="image/png, image/jpg, image/jpeg"
-                        multiple
-                        onChange={(e) => field.onChange(e.target.files)}
-                        ref={field.ref}
-                        className="w-full col-span-3"
-                        disabled={previews.length >= 2}
-                      />
-                    )}
-                  />
-                  {errors.images?.message && (
-                    <p className="text-sm text-red-400 w-full">
-                      {errors.images?.message}
-                    </p>
-                  )}
-                </div>
-
-                {previews.length > 0 && (
-                  <div className="grid col-span-2 items-center gap-4">
-                    <ImagePreview
-                      previews={previews}
-                      deleteImage={deleteImage}
-                      loading={loading}
-                    />
-                  </div>
-                )}
-
-                {/* Sizes */}
-                <div className="grid col-span-2 items-center gap-4 mb-10">
-                  <Separator className="my-4 col-span-3" />
-                  <Label
-                    htmlFor="name"
-                    className="text-left align-top self-start col-span-3"
-                  >
-                    Tallas
-                  </Label>
-                  <div className="col-span-3">
-                    <Controller
-                      name="sizes"
-                      control={control}
-                      rules={{
-                        required: "El campo es requerido.",
-                      }}
-                      render={({ field }) => (
-                        <MultipleSelector
-                          onChange={(e) => {
-                            appendQuantityFields(e);
-                            return field.onChange(e);
-                          }}
-                          badgeClassName="uppercase"
-                          value={field.value}
-                          defaultOptions={formattedSizes}
-                          hidePlaceholderWhenSelected
-                          placeholder="Seleccionar tallas"
-                          creatable
-                          emptyIndicator={
-                            <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
-                              No quedan tallas
-                            </p>
-                          }
-                        />
-                      )}
-                    />
-                    {errors.sizes?.message && (
-                      <p className="text-sm text-red-400 w-full">
-                        {errors.sizes?.message}
-                      </p>
-                    )}
-                    <div className="grid grid-cols-2 gap-x-3">
-                      {fields.length > 0 &&
-                        fields.map((item, index) => (
-                          <div
-                            key={item.size}
-                            className="flex flex-row mt-4 align-middle justify-between"
-                          >
-                            <div className="w-1/6 flex">
-                              <Badge
-                                variant="outline"
-                                className="w-4/6 flex justify-center"
-                              >
-                                {item.size.toUpperCase()}
-                              </Badge>
-                            </div>
-                            <Input
-                              {...register(`quantity.${index}.quantity`, {
-                                required: "El campo es requerido.",
-                                valueAsNumber: true,
-                                min: 1,
-                              })}
-                              type="number"
-                              className="w-5/6"
-                              placeholder="Cantidad"
-                            />
-                          </div>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </ScrollArea>
           )}
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button
-                type="button"
-                variant="secondary"
-                className="mr-2"
-                disabled={loading}
-                onClick={() => {
-                  resetForm();
-                  setOpen(false);
+
+          {/* Sizes */}
+          <div className="grid col-span-2 items-center gap-4 mb-10">
+            <Separator className="my-4 col-span-3" />
+            <Label
+              htmlFor="name"
+              className="text-left align-top self-start col-span-3"
+            >
+              Tallas
+            </Label>
+            <div className="col-span-3">
+              <Controller
+                name="sizes"
+                control={control}
+                rules={{
+                  required: "El campo es requerido.",
                 }}
-              >
-                Cerrar
-              </Button>
-            </DialogClose>
-            <Button type="submit" disabled={loading}>
-              {loading && <Loader2 className="animate-spin" />}
-              Guardar
-            </Button>
-          </DialogFooter>
-        </form>
-      </DialogContent>
-    </Dialog>
+                render={({ field }) => (
+                  <MultipleSelector
+                    onChange={(e) => {
+                      appendQuantityFields(e);
+                      return field.onChange(e);
+                    }}
+                    badgeClassName="uppercase"
+                    value={field.value}
+                    defaultOptions={formattedSizes}
+                    hidePlaceholderWhenSelected
+                    placeholder="Seleccionar tallas"
+                    creatable
+                    emptyIndicator={
+                      <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
+                        No quedan tallas
+                      </p>
+                    }
+                  />
+                )}
+              />
+              {errors.sizes?.message && (
+                <p className="text-sm text-red-400 w-full">
+                  {errors.sizes?.message}
+                </p>
+              )}
+              <div className="grid grid-cols-2 gap-x-3">
+                {fields.length > 0 &&
+                  fields.map((item, index) => (
+                    <div
+                      key={item.size}
+                      className="flex flex-row mt-4 align-middle justify-between"
+                    >
+                      <div className="w-1/6 flex">
+                        <Badge
+                          variant="outline"
+                          className="w-4/6 flex justify-center"
+                        >
+                          {item.size.toUpperCase()}
+                        </Badge>
+                      </div>
+                      <Input
+                        {...register(`quantity.${index}.quantity`, {
+                          required: "El campo es requerido.",
+                          valueAsNumber: true,
+                          min: 1,
+                        })}
+                        type="number"
+                        className="w-5/6"
+                        placeholder="Cantidad"
+                      />
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </ScrollArea>
+    </FormDialog>
   );
 }
