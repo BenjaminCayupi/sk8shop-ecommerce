@@ -40,3 +40,50 @@ export const createSlug = (title: string) => {
         .replace(/-+/g, "-")
     : ""; // Replace multiple hyphens with a single one
 };
+
+export const productValidations = {
+  title: {
+    required: "El campo es requerido.",
+    minLength: {
+      value: 4,
+      message: "Mínimo 4 caracteres.",
+    },
+  },
+  slug: {
+    required: "El campo es requerido.",
+    minLength: {
+      value: 4,
+      message: "Mínimo 4 caracteres.",
+    },
+  },
+  price: {
+    required: "El campo es requerido.",
+    valueAsNumber: true,
+    min: {
+      value: 1000,
+      message: "Valor mínimo 1000",
+    },
+  },
+  brandId: {
+    required: "El campo es requerido.",
+    validate: (value: string) =>
+      value !== "no-fruits" || "Debe seleccionar una opción",
+  },
+  subCategoryId: {
+    required: "El campo es requerido.",
+    validate: (value: string) =>
+      value !== "no-values" || "Debe seleccionar una opción",
+  },
+  description: {
+    required: "El campo es requerido.",
+    minLength: {
+      value: 4,
+      message: "Mínimo 4 caracteres.",
+    },
+    maxLength: {
+      value: 40,
+      message: "Máximo 40 caracteres.",
+    },
+  },
+  sizes: { required: "El campo es requerido." },
+};
