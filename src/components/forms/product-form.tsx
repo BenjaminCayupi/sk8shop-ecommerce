@@ -58,9 +58,11 @@ export function ProductForm({
   subCategories,
   sizes,
 }: Props) {
-  const [loading, setLoading] = useState(false);
-  const [formLoading, setFormLoading] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [{ loading, formLoading, open }, setStates] = useState({
+    loading: false,
+    formLoading: false,
+    open: false,
+  });
   const [previews, setPreviews] = useState<
     { id: number; url: string; productId: number }[]
   >([]);
@@ -75,10 +77,7 @@ export function ProductForm({
     setValue,
   } = useForm<Inputs>();
 
-  const { fields, replace } = useFieldArray({
-    control,
-    name: "quantity",
-  });
+  const { fields, replace } = useFieldArray({ control, name: "quantity" });
 
   const resetForm = () => {
     reset();
@@ -88,140 +87,109 @@ export function ProductForm({
   };
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    setLoading(true);
-    let response;
-
-    if (isEdit) {
-      response = await createUpdateProduct({ ...data, id });
-    } else {
-      response = await createUpdateProduct(data);
-    }
+    setStates((prev) => ({ ...prev, loading: true }));
+    const response = await createUpdateProduct(isEdit ? { ...data, id } : data);
 
     if (!response.ok) {
       toast.error(response.message);
-      setLoading(false);
+      setStates((prev) => ({ ...prev, loading: false }));
       return;
     }
 
-    setLoading(false);
-    setOpen(false);
+    setStates((prev) => ({ ...prev, loading: false, open: false }));
     resetForm();
     toast.success(response.message);
   };
 
   const editModal = async (id: number) => {
-    setOpen(true);
-    setFormLoading(true);
-
+    setStates((prev) => ({ ...prev, open: true, formLoading: true }));
     const response = await getProduct(id);
 
     if (!response.ok) {
       toast.error(response.message);
+      return;
     }
 
-    setValue("title", response.data!.title, { shouldValidate: true });
-    setValue("slug", response.data!.slug, { shouldValidate: true });
-    setValue("price", response.data!.price, { shouldValidate: true });
-    setValue("brandId", response.data!.brandId.toString(), {
-      shouldValidate: true,
-    });
-    setValue("subCategoryId", response.data!.subCategoryId.toString());
-    setValue("enabled", response.data!.enabled, { shouldValidate: true });
-    setValue("description", response.data!.description, {
-      shouldValidate: true,
-    });
-    setValue(
-      "sizes",
-      response.data!.Inventory.map((item) => ({
+    const { data } = response;
+    const valuesToSet = {
+      title: data!.title,
+      slug: data!.slug,
+      price: data!.price,
+      brandId: data!.brandId.toString(),
+      subCategoryId: data!.subCategoryId.toString(),
+      enabled: data!.enabled,
+      description: data!.description,
+      sizes: data!.Inventory.map((item) => ({
         value: item.size.id.toString(),
         label: item.size.title,
-      }))
-    );
+      })),
+    };
 
-    if (response.data?.ProductImage.length) {
-      setPreviews(response.data?.ProductImage);
-    }
+    Object.entries(valuesToSet).forEach(([key, value]) => {
+      setValue(key as keyof typeof valuesToSet, value, {
+        shouldValidate: true,
+      });
+    });
 
-    const options = response.data?.Inventory.map((item) => ({
+    if (data?.ProductImage.length) setPreviews(data.ProductImage);
+
+    const options = data?.Inventory.map((item) => ({
       size: item.size.title,
       quantity: item.quantity,
       sizeId: item.size.id,
     }));
 
-    if (options) {
-      replace(options);
-    }
-
-    setFormLoading(false);
+    if (options) replace(options);
+    setStates((prev) => ({ ...prev, formLoading: false }));
   };
 
-  const formattedSizes: Option[] = sizes
-    ? sizes.map((item) => ({ value: item.id.toString(), label: item.title }))
-    : [];
+  const formattedSizes: Option[] =
+    sizes?.map((item) => ({
+      value: item.id.toString(),
+      label: item.title,
+    })) ?? [];
 
   const appendQuantityFields = (options: Option[]) => {
-    const formattedOptions = options.map((item) => ({
+    const newFields = options.map((item) => ({
       size: item.label,
-      quantity: 0,
+      quantity: id
+        ? fields.find((f) => f.sizeId === Number(item.value))?.quantity ?? 0
+        : 0,
       sizeId: Number(item.value),
     }));
-
-    if (id) {
-      const currentFields = options.map((item) => {
-        const exist = fields.find(
-          (field) => field.sizeId === Number(item.value)
-        );
-
-        if (!exist) {
-          return { size: item.label, quantity: 0, sizeId: Number(item.value) };
-        }
-
-        return exist;
-      });
-
-      return replace(currentFields);
-    }
-
-    replace(formattedOptions);
+    replace(newFields);
   };
 
   const deleteImage = async (imageId: number, imageUrl: string) => {
-    setLoading(true);
+    setStates((prev) => ({ ...prev, loading: true }));
     const response = await deleteProductImage(imageId, imageUrl);
 
     if (!response.ok) {
-      setLoading(false);
-      return toast.error("Hubo un error al eliminar la imagen.");
+      toast.error("Hubo un error al eliminar la imagen.");
+    } else {
+      setPreviews((prev) => prev.filter((item) => item.id !== imageId));
     }
-
-    setLoading(false);
-    setPreviews([]);
+    setStates((prev) => ({ ...prev, loading: false }));
   };
 
   const validateFiles = (files: FileList | undefined) => {
-    if (!files && !previews.length) return false;
-
-    if (files && previews.length) {
-      const totalFiles = files.length + previews.length;
-
-      return totalFiles <= 2;
-    }
-
-    return (files?.length ?? 0) <= 2;
+    const previewCount = previews.length;
+    const fileCount = files?.length ?? 0;
+    return files || previewCount ? previewCount + fileCount <= 2 : false;
   };
 
   return (
     <FormDialog
       open={open}
-      onOpenChange={setOpen}
+      onOpenChange={(open) => setStates((prev) => ({ ...prev, open }))}
       isEdit={isEdit}
       id={id}
       toggleEdit={editModal}
-      openModal={() => setOpen(true)}
+      openModal={() => setStates((prev) => ({ ...prev, open: true }))}
       loading={loading}
       formLoading={formLoading}
       closeForm={() => {
-        setOpen(false);
+        setStates((prev) => ({ ...prev, open: false }));
         resetForm();
       }}
       onSubmit={handleSubmit(onSubmit)}
