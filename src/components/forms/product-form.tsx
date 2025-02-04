@@ -3,9 +3,8 @@ import { createUpdateProduct } from "@/actions/products/create-update-product";
 import { getProduct } from "@/actions/products/get-product";
 import { deleteProductImage } from "@/actions/products/remove-image";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { createSlug } from "@/utils";
+import { createSlug, productValidations } from "@/utils";
 import { Brand, Size, SubCategory } from "@prisma/client";
 import { useState } from "react";
 import {
@@ -29,6 +28,7 @@ import { Separator } from "../ui/separator";
 import { Switch } from "../ui/switch";
 import { Textarea } from "../ui/textarea";
 import FormDialog from "./form-dialog";
+import FieldContainer from "./field-container";
 
 interface Props {
   isEdit: boolean;
@@ -198,94 +198,50 @@ export function ProductForm({
         <div className="grid grid-cols-2 gap-4 py-4 p-2">
           {/* Name */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Nombre
-            </Label>
-            <Input
-              id="name"
-              className="col-span-3"
-              {...register("title", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-              })}
-            />
-            {errors.title?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.title?.message}
-              </p>
-            )}
+            <FieldContainer label="Nombre" error={errors.title?.message}>
+              <Input
+                id="name"
+                className="col-span-3"
+                {...register("title", productValidations.title)}
+              />
+            </FieldContainer>
           </div>
           {/* Slug */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Slug
-            </Label>
-            <Input
-              onFocus={() => setValue("slug", createSlug(watch("title")))}
-              id="name"
-              className="col-span-3"
-              {...register("slug", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-              })}
-            />
-            {errors.slug?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.slug?.message}
-              </p>
-            )}
+            <FieldContainer label="Slug" error={errors.slug?.message}>
+              <Input
+                onFocus={() => setValue("slug", createSlug(watch("title")))}
+                id="name"
+                className="col-span-3"
+                {...register("slug", productValidations.slug)}
+              />
+            </FieldContainer>
           </div>
           {/* Price */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Precio
-            </Label>
-            <Input
-              id="name"
-              type="number"
-              className="col-span-3"
-              {...register("price", {
-                required: "El campo es requerido.",
-                valueAsNumber: true,
-                min: {
-                  value: 1000,
-                  message: "Valor mínimo 1000",
-                },
-              })}
-            />
-            {errors.price?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.price?.message}
-              </p>
-            )}
+            <FieldContainer label="Precio" error={errors.price?.message}>
+              <Input
+                id="name"
+                type="number"
+                className="col-span-3"
+                {...register("price", productValidations.price)}
+              />
+            </FieldContainer>
           </div>
           {/* Brand */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Marca
-            </Label>
-            <Controller
-              name="brandId"
-              control={control}
-              rules={{
-                required: "El campo es requerido.",
-                validate: (value) =>
-                  value !== "no-fruits" || "Debe seleccionar una opción",
-              }}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full capitalize col-span-3">
-                    <SelectValue placeholder="Seleccionar marca" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {brands && brands.length ? (
-                      brands.map((brand) => (
+            <FieldContainer label="Marca" error={errors.brandId?.message}>
+              <Controller
+                name="brandId"
+                control={control}
+                rules={productValidations.brandId}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full capitalize col-span-3">
+                      <SelectValue placeholder="Seleccionar marca" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {brands?.map((brand) => (
                         <SelectItem
                           key={brand.id}
                           value={brand.id.toString()}
@@ -293,43 +249,34 @@ export function ProductForm({
                         >
                           {brand.title}
                         </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-fruits" disabled>
-                        No hay marcas
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.brandId?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.brandId?.message}
-              </p>
-            )}
+                      )) ?? (
+                        <SelectItem value="no-values" disabled>
+                          No hay marcas
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FieldContainer>
           </div>
           {/* Subcategory */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Subcategoría
-            </Label>
-            <Controller
-              name="subCategoryId"
-              control={control}
-              rules={{
-                required: "El campo es requerido.",
-                validate: (value) =>
-                  value !== "no-fruits" || "Debe seleccionar una opción",
-              }}
-              render={({ field }) => (
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger className="w-full capitalize col-span-3">
-                    <SelectValue placeholder="Seleccionar categoría" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subCategories && subCategories.length ? (
-                      subCategories.map((subCategory) => (
+            <FieldContainer
+              label="Subcategoría"
+              error={errors.subCategoryId?.message}
+            >
+              <Controller
+                name="subCategoryId"
+                control={control}
+                rules={productValidations.subCategoryId}
+                render={({ field }) => (
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <SelectTrigger className="w-full capitalize col-span-3">
+                      <SelectValue placeholder="Seleccionar categoría" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {subCategories?.map((subCategory) => (
                         <SelectItem
                           key={subCategory.id}
                           value={subCategory.id.toString()}
@@ -337,100 +284,74 @@ export function ProductForm({
                         >
                           {subCategory.title}
                         </SelectItem>
-                      ))
-                    ) : (
-                      <SelectItem value="no-fruits" disabled>
-                        No hay subcategorías
-                      </SelectItem>
-                    )}
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.subCategoryId?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.subCategoryId?.message}
-              </p>
-            )}
+                      )) ?? (
+                        <SelectItem value="no-values" disabled>
+                          No hay subcategorías
+                        </SelectItem>
+                      )}
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </FieldContainer>
           </div>
           {/* Enabled */}
           <div className="grid items-center gap-4">
-            <Label htmlFor="airplane-mode">Habilitado</Label>
-            <Controller
-              control={control}
-              name="enabled"
-              defaultValue={false}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Switch
-                  onCheckedChange={onChange}
-                  onBlur={onBlur}
-                  checked={value}
-                />
-              )}
-            />
+            <FieldContainer label="Habilitado">
+              <Controller
+                control={control}
+                name="enabled"
+                defaultValue={false}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Switch
+                    onCheckedChange={onChange}
+                    onBlur={onBlur}
+                    checked={value}
+                  />
+                )}
+              />
+            </FieldContainer>
           </div>
           {/* Description */}
           <div className="grid col-span-2 items-center gap-4">
-            <Label htmlFor="name" className="text-left">
-              Descripción
-            </Label>
-            <Textarea
-              placeholder="Descripción de la categoría"
-              className="col-span-3"
-              {...register("description", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-                maxLength: {
-                  value: 40,
-                  message: "Máximo 40 caracteres.",
-                },
-              })}
-            />
-            {errors.description?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.description?.message}
-              </p>
-            )}
+            <FieldContainer
+              label="Descripción"
+              error={errors.description?.message}
+            >
+              <Textarea
+                placeholder="Descripción de la categoría"
+                className="col-span-3"
+                {...register("description", productValidations.description)}
+              />
+            </FieldContainer>
           </div>
           {/* Images */}
           <div className="grid col-span-2 items-center gap-4">
             <Separator className="my-4 col-span-3" />
-            <Label
-              htmlFor="picture"
-              className="text-left align-top self-start col-span-3"
-            >
-              Imágenes
-            </Label>
-            <Controller
-              name="images"
-              control={control}
-              defaultValue={undefined}
-              rules={{
-                validate: (files) =>
-                  validateFiles(files) ||
-                  "Solo puedes subir un máximo de 2 archivos en total.",
-              }}
-              render={({ field }) => (
-                <Input
-                  id="picture"
-                  type="file"
-                  accept="image/png, image/jpg, image/jpeg"
-                  multiple
-                  onChange={(e) => field.onChange(e.target.files)}
-                  ref={field.ref}
-                  className="w-full col-span-3"
-                  disabled={previews.length >= 2}
-                />
-              )}
-            />
-            {errors.images?.message && (
-              <p className="text-sm text-red-400 w-full">
-                {errors.images?.message}
-              </p>
-            )}
+            <FieldContainer label="Imágenes" error={errors.images?.message}>
+              <Controller
+                name="images"
+                control={control}
+                defaultValue={undefined}
+                rules={{
+                  validate: (files) =>
+                    validateFiles(files) ||
+                    "Solo puedes subir un máximo de 2 archivos en total.",
+                }}
+                render={({ field }) => (
+                  <Input
+                    id="picture"
+                    type="file"
+                    accept="image/png, image/jpg, image/jpeg"
+                    multiple
+                    onChange={(e) => field.onChange(e.target.files)}
+                    ref={field.ref}
+                    className="w-full col-span-3"
+                    disabled={previews.length >= 2}
+                  />
+                )}
+              />
+            </FieldContainer>
           </div>
 
           {previews.length > 0 && (
@@ -446,47 +367,39 @@ export function ProductForm({
           {/* Sizes */}
           <div className="grid col-span-2 items-center gap-4 mb-10">
             <Separator className="my-4 col-span-3" />
-            <Label
-              htmlFor="name"
+            <FieldContainer
+              label="Tallas"
+              error={errors.sizes?.message}
               className="text-left align-top self-start col-span-3"
             >
-              Tallas
-            </Label>
-            <div className="col-span-3">
-              <Controller
-                name="sizes"
-                control={control}
-                rules={{
-                  required: "El campo es requerido.",
-                }}
-                render={({ field }) => (
-                  <MultipleSelector
-                    onChange={(e) => {
-                      appendQuantityFields(e);
-                      return field.onChange(e);
-                    }}
-                    badgeClassName="uppercase"
-                    value={field.value}
-                    defaultOptions={formattedSizes}
-                    hidePlaceholderWhenSelected
-                    placeholder="Seleccionar tallas"
-                    creatable
-                    emptyIndicator={
-                      <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
-                        No quedan tallas
-                      </p>
-                    }
-                  />
-                )}
-              />
-              {errors.sizes?.message && (
-                <p className="text-sm text-red-400 w-full">
-                  {errors.sizes?.message}
-                </p>
-              )}
-              <div className="grid grid-cols-2 gap-x-3">
-                {fields.length > 0 &&
-                  fields.map((item, index) => (
+              <div className="col-span-3">
+                <Controller
+                  name="sizes"
+                  control={control}
+                  rules={productValidations.sizes}
+                  render={({ field }) => (
+                    <MultipleSelector
+                      onChange={(e) => {
+                        appendQuantityFields(e);
+                        return field.onChange(e);
+                      }}
+                      badgeClassName="uppercase"
+                      value={field.value}
+                      defaultOptions={formattedSizes}
+                      hidePlaceholderWhenSelected
+                      placeholder="Seleccionar tallas"
+                      creatable
+                      emptyIndicator={
+                        <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
+                          No quedan tallas
+                        </p>
+                      }
+                    />
+                  )}
+                />
+
+                <div className="grid grid-cols-2 gap-x-3">
+                  {fields.map((item, index) => (
                     <div
                       key={item.size}
                       className="flex flex-row mt-4 align-middle justify-between"
@@ -511,8 +424,9 @@ export function ProductForm({
                       />
                     </div>
                   ))}
+                </div>
               </div>
-            </div>
+            </FieldContainer>
           </div>
         </div>
       </ScrollArea>
