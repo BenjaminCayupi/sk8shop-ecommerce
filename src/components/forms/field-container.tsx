@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { Label } from "../ui/label";
 import FieldError from "./field-error";
 
@@ -15,10 +16,10 @@ export default function FieldContainer({
   className,
 }: Props) {
   return (
-    <>
-      <Label className={`text-left capitalize ${className}`}>{label}</Label>
+    <div className={clsx("flex flex-col gap-3", className)}>
+      <Label className={`text-left capitalize`}>{label}</Label>
       {children}
       <FieldError error={error} />
-    </>
+    </div>
   );
 }
