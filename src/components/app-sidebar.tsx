@@ -1,7 +1,14 @@
 "use client";
 
 import * as React from "react";
-import { BookOpen, Bot, Settings2, SquareTerminal } from "lucide-react";
+import {
+  BookOpen,
+  Bot,
+  Settings2,
+  ShoppingCart,
+  SquareTerminal,
+  User,
+} from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -18,13 +25,13 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "",
   },
   navMain: [
     {
       title: "Productos",
       url: "#",
-      icon: SquareTerminal,
+      icon: ShoppingCart,
       isActive: true,
       items: [
         {
@@ -82,7 +89,7 @@ const data = {
     {
       title: "Usuarios",
       url: "#",
-      icon: BookOpen,
+      icon: User,
       items: [
         {
           title: "Usuarios",
