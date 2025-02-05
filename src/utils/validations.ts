@@ -86,4 +86,9 @@ export const productValidations = {
     },
   },
   sizes: { required: "El campo es requerido." },
+  categoryId: {
+    required: "El campo es requerido.",
+    validate: (value: string) =>
+      value !== "no-values" || "Debe seleccionar una opción",
+  },
 };
