@@ -37,6 +37,7 @@ export function BrandsForm({ isEdit, id }: Props) {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setStates((prev) => ({ ...prev, loading: true }));
+
     const response = await createUpdateBrand(isEdit ? { ...data, id } : data);
 
     if (!response.ok) {
