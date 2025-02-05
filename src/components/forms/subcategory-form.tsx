@@ -18,6 +18,7 @@ import {
 import { getSubcategory } from "@/actions/subcategories/get-subcategory";
 import FormDialog from "./form-dialog";
 import FieldContainer from "./field-container";
+import { productValidations } from "@/utils";
 
 interface Props {
   isEdit: boolean;
@@ -96,6 +97,7 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
 
   return (
     <FormDialog
+      name="subcategoría"
       open={open}
       onOpenChange={(open) => setStates((prev) => ({ ...prev, open }))}
       isEdit={isEdit}
@@ -116,13 +118,7 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
             <Input
               id="name"
               className="col-span-3"
-              {...register("title", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-              })}
+              {...register("title", productValidations.title)}
             />
           </FieldContainer>
         </div>
@@ -135,17 +131,7 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
             <Textarea
               placeholder="Descripción de la subcategoría"
               className="col-span-3"
-              {...register("description", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-                maxLength: {
-                  value: 40,
-                  message: "Máximo 40 caracteres.",
-                },
-              })}
+              {...register("description", productValidations.description)}
             />
           </FieldContainer>
         </div>
@@ -155,28 +141,22 @@ export function SubcategoryForm({ isEdit, id, categories }: Props) {
             <Controller
               name="categoryId"
               control={control}
-              rules={{
-                required: "El campo es requerido.",
-                validate: (value) =>
-                  value !== "no-values" || "Debe seleccionar una opción",
-              }}
+              rules={productValidations.categoryId}
               render={({ field }) => (
                 <Select onValueChange={field.onChange} value={field.value}>
                   <SelectTrigger className="w-full capitalize">
                     <SelectValue placeholder="Seleccionar categoría" />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories && categories.length ? (
-                      categories.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                          className="capitalize"
-                        >
-                          {category.title}
-                        </SelectItem>
-                      ))
-                    ) : (
+                    {categories?.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                        className="capitalize cursor-pointer"
+                      >
+                        {category.title}
+                      </SelectItem>
+                    )) ?? (
                       <SelectItem value="no-values" disabled>
                         No hay categorías
                       </SelectItem>

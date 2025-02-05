@@ -9,6 +9,7 @@ import { createUpdateBrand } from "@/actions/brands/create-update-brand";
 import { getBrand } from "@/actions/brands/get-brand";
 import FormDialog from "./form-dialog";
 import FieldContainer from "./field-container";
+import { productValidations } from "@/utils";
 interface Props {
   isEdit: boolean;
   id?: number;
@@ -79,6 +80,7 @@ export function BrandsForm({ isEdit, id }: Props) {
 
   return (
     <FormDialog
+      name="marca"
       open={open}
       onOpenChange={(open) => setStates((prev) => ({ ...prev, open }))}
       isEdit={isEdit}
@@ -98,13 +100,7 @@ export function BrandsForm({ isEdit, id }: Props) {
           <Input
             id="name"
             className="col-span-3"
-            {...register("title", {
-              required: "El campo es requerido.",
-              minLength: {
-                value: 4,
-                message: "Mínimo 4 caracteres.",
-              },
-            })}
+            {...register("title", productValidations.title)}
           />
         </FieldContainer>
 

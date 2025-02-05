@@ -180,6 +180,7 @@ export function ProductForm({
 
   return (
     <FormDialog
+      name="producto"
       open={open}
       onOpenChange={(open) => setStates((prev) => ({ ...prev, open }))}
       isEdit={isEdit}

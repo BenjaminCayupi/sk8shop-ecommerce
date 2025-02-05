@@ -1,18 +1,5 @@
 "use client";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Edit, Loader2, Plus } from "lucide-react";
 import { useState } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Switch } from "../ui/switch";
@@ -23,6 +10,7 @@ import { getCategory } from "@/actions/categories/get-category";
 import toast from "react-hot-toast";
 import FormDialog from "./form-dialog";
 import FieldContainer from "./field-container";
+import { productValidations } from "@/utils";
 
 interface Props {
   isEdit: boolean;
@@ -98,6 +86,7 @@ export function CategoryForm({ isEdit, id }: Props) {
 
   return (
     <FormDialog
+      name="categoría"
       open={open}
       onOpenChange={(open) => setStates((prev) => ({ ...prev, open }))}
       isEdit={isEdit}
@@ -118,13 +107,7 @@ export function CategoryForm({ isEdit, id }: Props) {
             <Input
               id="name"
               className="col-span-3"
-              {...register("title", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-              })}
+              {...register("title", productValidations.title)}
             />
           </FieldContainer>
         </div>
@@ -137,17 +120,7 @@ export function CategoryForm({ isEdit, id }: Props) {
             <Textarea
               placeholder="Descripción de la categoría"
               className="col-span-3"
-              {...register("description", {
-                required: "El campo es requerido.",
-                minLength: {
-                  value: 4,
-                  message: "Mínimo 4 caracteres.",
-                },
-                maxLength: {
-                  value: 40,
-                  message: "Máximo 40 caracteres.",
-                },
-              })}
+              {...register("description", productValidations.description)}
             />
           </FieldContainer>
         </div>
