@@ -67,7 +67,7 @@ export const productValidations = {
   brandId: {
     required: "El campo es requerido.",
     validate: (value: string) =>
-      value !== "no-fruits" || "Debe seleccionar una opción",
+      value !== "no-values" || "Debe seleccionar una opción",
   },
   subCategoryId: {
     required: "El campo es requerido.",
