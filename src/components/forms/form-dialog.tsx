@@ -13,6 +13,7 @@ import { Edit, Plus, Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface Props {
+  name: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   isEdit: boolean;
@@ -27,6 +28,7 @@ interface Props {
 }
 
 export default function FormDialog({
+  name,
   open,
   onOpenChange,
   isEdit,
@@ -59,12 +61,12 @@ export default function FormDialog({
       <DialogContent className="sm:max-w-md md:max-w-5xl">
         <form onSubmit={onSubmit}>
           <DialogHeader>
-            <DialogTitle>{`${
-              isEdit ? "Editar" : "Crear"
-            } Producto`}</DialogTitle>
+            <DialogTitle>{`${isEdit ? "Editar" : "Crear"} ${
+              name.charAt(0).toUpperCase() + name.slice(1)
+            }s`}</DialogTitle>
             <DialogDescription>
-              Haz cambios en tus productos aquí. Oprime guardar cuando estés
-              listo.
+              Haz cambios en tus {name.toLowerCase()} aquí. Oprime guardar
+              cuando estés listo.
             </DialogDescription>
           </DialogHeader>
           {formLoading ? (
