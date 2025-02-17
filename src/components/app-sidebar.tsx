@@ -1,14 +1,7 @@
 "use client";
 
 import * as React from "react";
-import {
-  BookOpen,
-  Bot,
-  Settings2,
-  ShoppingCart,
-  SquareTerminal,
-  User,
-} from "lucide-react";
+import { Bot, Settings2, ShoppingCart, User } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -69,8 +62,8 @@ const data = {
       icon: Bot,
       items: [
         {
-          title: "Home",
-          url: "#",
+          title: "Pagina inicio",
+          url: "/admin/homepage",
         },
         {
           title: "Sobre nosotros",
