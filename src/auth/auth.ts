@@ -17,6 +17,8 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   session: {
     strategy: "jwt",
+    maxAge: 60 * 60, // 1 hour in seconds
+    updateAge: 24 * 60 * 60, // Optional: force session update every 24 hours
   },
   providers: [
     Credentials({
