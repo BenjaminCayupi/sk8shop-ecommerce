@@ -23,7 +23,7 @@ import ModeToggle from "./mode-toggle";
 // This is sample data.
 const data = {
   user: {
-    name: "shadcn",
+    name: "Benjamin",
     email: "m@example.com",
     avatar: "",
   },
