@@ -4,7 +4,7 @@ import FieldError from "./field-error";
 
 interface Props {
   children: React.ReactNode;
-  label: string;
+  label?: string;
   error?: string | undefined;
   className?: string;
 }
@@ -17,7 +17,7 @@ export default function FieldContainer({
 }: Props) {
   return (
     <div className={clsx("flex flex-col gap-3", className)}>
-      <Label className={`text-left capitalize`}>{label}</Label>
+      {label ?? <Label className={`text-left capitalize`}>{label}</Label>}
       {children}
       <FieldError error={error} />
     </div>
