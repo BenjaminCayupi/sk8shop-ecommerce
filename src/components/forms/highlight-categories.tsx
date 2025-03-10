@@ -40,6 +40,7 @@ export default function HighlightCategoriesForm({ categories }: Props) {
         hidePlaceholderWhenSelected
         placeholder="Seleccionar tallas"
         maxSelected={3}
+        className="w-[50%]"
         emptyIndicator={
           <p className="text-center text-sm  text-gray-600 dark:text-gray-400">
             No hay categorías creadas o habilitadas
