@@ -3,6 +3,7 @@ import { Controller, useForm } from "react-hook-form";
 import FieldContainer from "./field-container";
 import { Input } from "../ui/input";
 import { Option } from "../ui/multiple-selector";
+import { Button } from "../ui/button";
 
 type Inputs = {
   banner: FileList;
@@ -77,6 +78,9 @@ export default function BannerForm() {
             />
           </div>
         )} */}
+      </div>
+      <div className="mt-4">
+        <Button>Guardar</Button>
       </div>
     </div>
   );

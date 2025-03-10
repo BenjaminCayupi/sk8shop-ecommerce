@@ -1,4 +1,5 @@
 import { getAllCategories } from "@/actions/categories/get-all-categories";
+import AlertForm from "@/components/forms/alert-form";
 import BannerForm from "@/components/forms/banner-form";
 import HighlightCategoriesForm from "@/components/forms/highlight-categories";
 import PageTitle from "@/components/page-title";
@@ -13,7 +14,7 @@ export default async function HomePage() {
       <div id="content" className="grid gap-y-6">
         <BannerForm />
         <HighlightCategoriesForm categories={categories ?? []} />
-        {/* Alerta */}
+        <AlertForm />
         {/* Imagen del medio */}
       </div>
     </div>
